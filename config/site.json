@@ -1,0 +1,24 @@
+﻿{
+    "name": "testing all node options",
+    "url": "",
+    "port": "3002",
+    "appRoot": "/",
+    "couchBase": "",
+       
+    "mongodb": { "host": "mongodb://localhost:27017/juntas" },
+    "mimeTypes": { ".html": "text/html",
+        ".css": "text/css",
+        ".js": "text/javascript",
+        ".less": "text/less",
+        ".json": "application/json",
+        ".ttf": "application/font-woff",
+          ".woff": "application/font-woff"
+
+
+        
+
+
+    } 
+        
+    
+}

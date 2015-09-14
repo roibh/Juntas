@@ -1,0 +1,1 @@
+c:\nodeProjects\juntas\juntas\bin\Microsoft.NodejsTools.WebRole.dll
