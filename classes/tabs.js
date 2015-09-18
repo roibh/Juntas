@@ -14,6 +14,30 @@
     
     
     
+    app.post('/fillfollowers', function (req, res) {
+        if (!req.body) return res.sendStatus(400);
+        var finalObject = {};
+        dal.getSingle("Tabs", req.body._id, function (data) { 
+            
+            dal.getSet(data.Followers, "Users", function (data) {
+            
+                for (var i = 0; i < data.length; i++) {
+                    delete data[i].Password;
+
+                    finalObject[data[i]._id] = data[i];
+                   
+                }
+                res.json(finalObject);
+            });
+        
+        
+        
+        })
+
+    });
+    
+    
+    
     app.post('/tabs', function (req, res) {
         if (!req.body) return res.sendStatus(400);
         

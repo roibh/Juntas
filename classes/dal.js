@@ -47,7 +47,14 @@
         impl.getSingle(name, id, callback);
     }
     
+    function _pushObject(id, collectionName, propertyName, pushObject, callback)
+    {
+        impl.pushObject(id, collectionName, propertyName, pushObject, callback);
+    }
     
+    function _getSet(idArr, collection, callback) {
+        impl.getSet(idArr, collection, callback);
+    }
 
     return {
         connect: _connect,
@@ -57,8 +64,9 @@
         deleteCollection:_deleteCollection,
         getAll: _getAll,
         getSingle: _getSingle,
-        getCollection: _getCollection
-
+        getCollection: _getCollection,
+        pushObject: _pushObject,
+        getSet: _getSet
     };
 })();
 // node.js module export

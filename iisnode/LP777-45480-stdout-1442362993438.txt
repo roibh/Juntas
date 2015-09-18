@@ -1,0 +1,114 @@
+init complete
+inserted document from Tabs
+created room: [object Object]
+{ _id: '55f8b67861b9fba8b1f5e7ff',
+  Name: 'sss',
+  UserId: '55f355f71528be083328d5e1',
+  TabId: 155,
+  map: 
+   [ { Url: 'https://www.google.co.il/?gws_rd=ssl',
+       Title: 'Google',
+       Created: '2015-09-16T00:23:20.808Z' } ],
+  '$$hashKey': '00B' }
+inserted document from Tabs
+created room: [object Object]
+{ _id: '55f920ba61b9fba8b1f5e800',
+  Name: 'love',
+  UserId: '55f355f71528be083328d5e1',
+  TabId: 157,
+  map: 
+   [ { Url: 'https://www.google.co.il/search?q=lover&oq=lover&aqs=chrome..69i57j0l5.751j0j8&sourceid=chrome&es_sm=93&ie=UTF-8',
+       Title: 'lover - Google Search',
+       Created: '2015-09-16T07:56:42.600Z' } ],
+  '$$hashKey': '00C' }
+created room: [object Object]
+{ _id: '55f92578473678b00b8b1203',
+  Name: 'google',
+  UserId: '55f92561473678b00b8b1202',
+  TabId: 4084,
+  map: 
+   [ { Url: 'chrome://newtab/',
+       Title: 'New Tab',
+       Created: '2015-09-16T08:16:56.371Z' } ],
+  '$$hashKey': '00E' }
+inserted document from Users
+updated document from Users
+updated document from Users
+updated document from Users
+inserted document from Tabs
+created room: [object Object]
+updated document from Users
+{ _id: '55f995d861b9fba8b1f5e802',
+  Name: 'new feed',
+  UserId: '55f367ed539d07045880decc',
+  TabId: 19,
+  map: 
+   [ { Url: 'http://www.jsoneditoronline.org/',
+       Title: 'JSON Editor Online - view, edit and format JSON online',
+       Created: '2015-09-16T16:16:24.801Z' } ],
+  '$$hashKey': '00G' }
+{ _id: '55f995d861b9fba8b1f5e802',
+  Name: 'new feed',
+  UserId: '55f367ed539d07045880decc',
+  TabId: 4414,
+  map: 
+   [ { Url: 'http://www.jsoneditoronline.org/',
+       Title: 'JSON Editor Online - view, edit and format JSON online',
+       Created: '2015-09-16T16:16:24.801Z' } ],
+  '$$hashKey': '00G' }
+inserted document from Tabs
+created room: [object Object]
+{ _id: '55f996a761b9fba8b1f5e803',
+  Name: 'aaaaa',
+  UserId: '55f355f71528be083328d5e1',
+  TabId: 4950,
+  map: 
+   [ { Url: 'chrome://extensions/?id=picgkcajfjlelgihjplemhoalfngeano',
+       Title: 'Extensions',
+       Created: '2015-09-16T16:19:51.067Z' } ],
+  '$$hashKey': '00E' }
+{ _id: '55f995d861b9fba8b1f5e802',
+  Name: 'new feed',
+  UserId: '55f367ed539d07045880decc',
+  TabId: 5148,
+  map: 
+   [ { Url: 'http://www.jsoneditoronline.org/',
+       Title: 'JSON Editor Online - view, edit and format JSON online',
+       Created: '2015-09-16T16:16:24.801Z' } ],
+  '$$hashKey': '00F' }
+{ _id: '55f996a761b9fba8b1f5e803',
+  Name: 'aaaaa',
+  UserId: '55f355f71528be083328d5e1',
+  TabId: 5148,
+  map: 
+   [ { Url: 'chrome://extensions/?id=picgkcajfjlelgihjplemhoalfngeano',
+       Title: 'Extensions',
+       Created: '2015-09-16T16:19:51.067Z' } ],
+  '$$hashKey': '00C' }
+{ _id: '55f920ba61b9fba8b1f5e800',
+  Name: 'love',
+  UserId: '55f355f71528be083328d5e1',
+  TabId: 5148,
+  map: 
+   [ { Url: 'https://www.google.co.il/search?q=lover&oq=lover&aqs=chrome..69i57j0l5.751j0j8&sourceid=chrome&es_sm=93&ie=UTF-8',
+       Title: 'lover - Google Search',
+       Created: '2015-09-16T07:56:42.600Z' } ],
+  '$$hashKey': '00H' }
+{ _id: '55f995d861b9fba8b1f5e802',
+  Name: 'new feed',
+  UserId: '55f367ed539d07045880decc',
+  TabId: 5148,
+  map: 
+   [ { Url: 'http://www.jsoneditoronline.org/',
+       Title: 'JSON Editor Online - view, edit and format JSON online',
+       Created: '2015-09-16T16:16:24.801Z' } ],
+  '$$hashKey': '00B' }
+{ _id: '55f995d861b9fba8b1f5e802',
+  Name: 'new feed',
+  UserId: '55f367ed539d07045880decc',
+  TabId: 19,
+  map: 
+   [ { Url: 'http://www.jsoneditoronline.org/',
+       Title: 'JSON Editor Online - view, edit and format JSON online',
+       Created: '2015-09-16T16:16:24.801Z' } ],
+  '$$hashKey': '00I' }

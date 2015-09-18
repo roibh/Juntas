@@ -49,7 +49,7 @@
         res.queryMode = x[0].trim();
         
         if (x[2] == "SET") {
-            res.values = {"$set": {}}
+            res.values = { "$set": {} }
             var pairs = str.substring(str.indexOf("SET") + 3).split(",");
             for (var j = 0; j < pairs.length; j++) {
                 var triple = pairs[j].split("=");
@@ -90,13 +90,12 @@
             }
             if (x[i] == "WHERE") {
                 var conditionPoint = res.where;
-                if (res.queryMode != "UPDATE")
-                    {
+                if (res.queryMode != "UPDATE") {
                     conditionPoint["$query"] = {};
                     conditionPoint = conditionPoint["$query"];
                 }
-
-
+                
+                
                 var pairs = str.substring(str.indexOf("WHERE") + 6).split("AND");
                 for (var j = 0; j < pairs.length; j++) {
                     var triple = pairs[j].split("@");
@@ -106,15 +105,15 @@
                     
                     if (cleankey === "$limit")
                         res.limit = params[cleankey];
-
+                    
                     var operator = mongoOperator(triple[0].replace(cleankey, '').trim());
                     
                     if (operator !== "^^") {
-                        conditionPoint[cleankey] = {};                     
-                       
-
+                        conditionPoint[cleankey] = {};
+                        
+                        
                         conditionPoint[cleankey][operator] = params[cleankey];
-
+                        
                         if (params[cleankey] == "false")
                             conditionPoint[cleankey][operator] = false;
                         if (params[cleankey] == "true")
@@ -170,7 +169,19 @@
     }
     
     function _getSingle(name, id, callback) {
-        Dal.query("SELECT * FROM " + name + " WHERE id=@id", { "id": id }, callback);
+        
+        _connect(function (err, db) {
+            assert.equal(null, err);
+            
+            
+            
+            db.collection(name).findOne({ "_id": ObjectID(id) }, function (err, doc) {
+                callback(doc);
+            });
+
+           
+        });
+      
     }
     
     this.db = null;
@@ -223,14 +234,50 @@
         });
     }
     
+    
+    
+    function _pushObject(id, collection, propertyName, pushObject, callback) {
+        _connect(function (err, db) {
+            assert.equal(null, err);
+            
+            var pusher = {};
+            pusher[propertyName] = pushObject;
+            db.collection(collection).update({ _id: ObjectID(id) }, { $push: pusher }, function (err, data) {
+                
+                callback(data);
+            });
+
+
+            
+        });
+
+
+
+    }
+    
+    function _getSet(idArr, collection, callback) {
+        _connect(function (err, db) {
+            assert.equal(null, err);
+            for (var i = 0; i < idArr.length; i++) {
+                idArr[i] = ObjectID(idArr[i]);
+            }    
+            db.collection(collection).find({ _id: { "$in": idArr }}).toArray(function (err, data) {                
+                callback(data);
+            });            
+        });
+    }
+    
+    
+    
+
     function _query(queryStr, params, callback) {
         var oQuery = parse(queryStr, params);
         
         
         
         
-        //if (oQuery.where["_id"] !== undefined) {
-        //    oQuery.where["_id"] = ObjectID(oQuery.where["_id"]);
+        //if (oQuery.where["$query"]["_id"] !== undefined) {
+        //    oQuery.where["$query"]["_id"] = { ObjectID(oQuery.where["_id"]);
         //}
         
         
@@ -239,7 +286,7 @@
             
             switch (oQuery.queryMode) {
                 case "INSERT":
-
+                    
                     db.collection(oQuery.collection).save(oQuery.values
                         , function (err, result) {
                         assert.equal(err, null);
@@ -272,7 +319,7 @@
                             } else {
                                 callback(retArr)
                             }
-                        });                       
+                        });
                     });
                     
                     break;
@@ -292,7 +339,7 @@
                         oQuery.limit = 0;
                     
                     
-
+                    
                     cursor.limit(oQuery.limit).each(function (err, doc) {
                         assert.equal(err, null);
                         if (doc != null) {
@@ -317,7 +364,9 @@
         getSingle: _getSingle,
         deleteCollection: _deleteCollection,
         saveSchema: _saveSchema,
-        getSchema: _getSchema
+        getSchema: _getSchema,
+        pushObject: _pushObject,
+        getSet: _getSet
      
     };
 })();
