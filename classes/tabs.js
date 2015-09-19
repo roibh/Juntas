@@ -8,6 +8,7 @@
     var api = require('./api.js');
     var moment = require('moment');
     var cors = require('cors');
+    var ObjectID = require("mongodb").ObjectID;
     app.use(cors());
     
     
@@ -68,6 +69,36 @@
     });
     
     
+    app.post('/followedfeeds', function (req, res) {
+        if (!req.body) return res.sendStatus(400);
+        
+        // Convert our form input into JSON ready to store in Couchbase
+        var jsonVersion = "{}";//returnJSONResults("", "");//JSON.stringify(req.body);
+        
+        
+        
+        var query = "SELECT * FROM Tabs WHERE Followers^^@Followers";
+        dal.query(query, {"Followers": { "$in": ObjectID(req.body.UserId) }}, function (items) {
+            res.json({ items: items });
+            
+
+        });
+        
+        
+        
+    // user.login(email, password,   function (user) { 
+    // 
+    //        if (user.error !== undefined ) return res.sendStatus(404);
+    //        
+    //       return res.json(user);
+    //     
+    //      
+    //     });
+    
+     
+ 
+    });
+
     
     app.post('/feeds', function (req, res) {
         if (!req.body) return res.sendStatus(400);
