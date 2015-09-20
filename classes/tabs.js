@@ -13,18 +13,37 @@
     
     
     
-    
+    app.post('/unsubscribefollowers', function (req, res) {
+        if (!req.body) return res.sendStatus(400);
+        var finalObject = {};
+        dal.getSingle("Tabs", req.body._id, function (data) {
+            if (data.UserId !== req.body.userId) {
+                data.Followers.splice(data.Followers.indexOf(req.body.userId), 1);
+                var query = "INSERT INTO Tabs";
+                dal.query(query, data, function (tab) {
+                //res.json(tab.ops[0]);
+             
+            
+                });
+            }
+             
+        
+        
+        
+        })
+
+    });
     
     app.post('/fillfollowers', function (req, res) {
         if (!req.body) return res.sendStatus(400);
         var finalObject = {};
-        dal.getSingle("Tabs", req.body._id, function (data) { 
+        dal.getSingle("Tabs", req.body._id, function (data) {
             
             dal.getSet(data.Followers, "Users", function (data) {
-            
+                
                 for (var i = 0; i < data.length; i++) {
                     delete data[i].Password;
-
+                    
                     finalObject[data[i]._id] = data[i];
                    
                 }
@@ -77,8 +96,8 @@
         
         
         
-        var query = "SELECT * FROM Tabs WHERE Followers^^@Followers";
-        dal.query(query, {"Followers": { "$in": ObjectID(req.body.UserId) }}, function (items) {
+        var query = "SELECT * FROM Tabs WHERE Followers in @Followers";
+        dal.query(query, { "Followers": [req.body.UserId] }, function (items) {
             res.json({ items: items });
             
 
@@ -98,7 +117,7 @@
      
  
     });
-
+    
     
     app.post('/feeds', function (req, res) {
         if (!req.body) return res.sendStatus(400);

@@ -176,7 +176,10 @@
             
             
             db.collection(name).findOne({ "_id": ObjectID(id) }, function (err, doc) {
-                callback(doc);
+                if (err !== null || doc === null)
+                    callback({ "error": "not found" });
+                else
+                    callback(doc);
             });
 
            

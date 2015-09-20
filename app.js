@@ -60,11 +60,7 @@ var tabs = require('./classes/tabs.js')(app);
 //var io = require('socket.io').listen(ioserver);
 
 
-app.get('/setup', function (req, res) {
-    debugger
-    res.send("ok");
-});
-
+ 
 console.log("init complete");
 global.Rooms = {};
 
@@ -138,9 +134,12 @@ io.on('connection', function (socket) {
                 }
                 else {
                     dal.getSingle("Users", userid, function (data) {
+                        if (data.error === undefined)
+                         {
                         delete data.Password;
                         delete data.Token;
-                        io.to(tabid).emit("tab connected", { "TabId": tabid , "User": data });
+                            io.to(tabid).emit("tab connected", { "TabId": tabid , "User": data });
+                        }
                     })
                 }
                     
