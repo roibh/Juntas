@@ -1,7 +1,7 @@
 ﻿{
     "name": "testing all node options",
     "url": "",
-    "port": "3002",
+    "port": "80",
     "appRoot": "/",
     "couchBase": "",
        

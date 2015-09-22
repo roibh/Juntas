@@ -20,7 +20,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
     <ProjectView>ShowAllFiles</ProjectView>
-    <NodejsPort>3002</NodejsPort>
+    <NodejsPort>80</NodejsPort>
     <StartWebBrowser>True</StartWebBrowser>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -40,12 +40,13 @@
     <Compile Include="classes\tabs.js" />
     <Compile Include="classes\user.js" />
     <Compile Include="classes\webServer.js" />
-    <Compile Include="routes\index.js" />
+    <Compile Include="classes\juntify.js" />
     <Compile Include="routes\users.js" />
     <Compile Include="bin\www" />
     <Content Include="config\client.json" />
     <Content Include="config\site.json" />
     <Content Include="package.json" />
+    <Content Include="public\redirect.html" />
     <Content Include="public\stylesheets\style.styl" />
     <Content Include="README.md" />
     <Content Include="views\index.jade" />
@@ -60,6 +61,7 @@
     <Folder Include="public\" />
     <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />
+    <Folder Include="public\conifg\" />
     <Folder Include="public\stylesheets\" />
     <Folder Include="routes\" />
     <Folder Include="views\" />

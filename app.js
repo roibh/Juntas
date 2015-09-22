@@ -26,52 +26,21 @@ http = require('http');
 var activeport = config.appSettings().port
 if (process.env.PORT !== undefined)
     activeport = process.env.PORT;
-
-
-server = http.createServer(app).listen(activeport)
-
-
-
-var io = socket.listen(server)
-
-
-
-
-
-
-
-
-
-
-
-
-//var server = require('./classes/webServer.js');
-//server.start(app);
-
+server = http.createServer(app).listen(activeport);
+var io = socket.listen(server);
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors());
-
-//var api = require('./classes/api.js');
-var user = require('./classes/user.js')(app);
-var tabs = require('./classes/tabs.js')(app);
-
-//var ioserver = require('http').createServer(app);
-//var io = require('socket.io').listen(ioserver);
-
+app.use(express.static('public'));
+var juntify = require('./classes/juntify.js'); 
+app.use('/juntify', juntify);
 
  
+
+var user = require('./classes/user.js')(app);
+var tabs = require('./classes/tabs.js')(app);
 console.log("init complete");
 global.Rooms = {};
-
-//server.addListener('upgrade', function (request, socket, head) {
-//      var ws = new WebSocket(request, socket, head);
-
-
-//}); 
-
-
-
 //io.configure(function () {
 //    io.set('transports', ['websocket']);
 //    if (process.env.IISNODE_VERSION) {
@@ -86,10 +55,8 @@ global.Rooms = {};
 //});
 
 
-io.on('connection', function (socket) {
-    //socket.emit('news', { hello: 'world' });
-    
-    
+io.on('connection', function (socket) {  
+
     socket.on('tab navigate', function (data) {
         
         
@@ -189,22 +156,6 @@ io.on('connection', function (socket) {
     
 
 });
-
-
-
-
-
-
-
-
-//api.start(app);
-
-
-//io.on('connection', function (socket) {
-//    socket.on('chat message', function (msg) {
-//        console.log('message: ' + msg);
-//    });
-//});
 
 
 module.exports = app;

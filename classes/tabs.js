@@ -56,6 +56,17 @@
 
     });
     
+    app.get('/tabs', function (req, res) {
+        if (!req.query) return res.sendStatus(400);
+        
+        var query = "SELECT * FROM Tabs WJERE _id=@_id";
+        dal.getSingle("Tabs", req.query._id , function (tab) {
+            res.json(tab);
+        });
+
+      
+
+    });
     
     
     app.post('/tabs', function (req, res) {

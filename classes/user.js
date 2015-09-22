@@ -49,13 +49,42 @@
 
     });
     
+    app.post("/oauth", function (req, res) { 
+
+        if (!req.body) return res.sendStatus(400);
     
+        var query = "SELECT * FROM Users WHERE Uid=@Uid;";
+        dal.query(query, { "Uid": req.body.Uid }, function (user) {
+            if (user.length == 0) {
+                user = {
+                    "Email": req.body.Email,
+                    "Token": req.body.Token,
+                    "Uid" : req.body.Uid
+                }
+                var query = "INSERT INTO Users Email=@Email, Token=@Token, Uid=@Uid;";
+                dal.query(query, user, function (user) {
+                    res.json(user.ops[0]);
+                });
+                
+            } else {
+                
+                res.json(user);
+            }
+        
+        
+        });
+    
+    
+    
+    });
+    
+    
+
     app.post('/login', function (req, res) {
         
         if (!req.body) return res.sendStatus(400);
         
-        
-        
+       
         //var api_token = req.headers["api_key"];
         //var device_id = req.headers["device_id"];
         
