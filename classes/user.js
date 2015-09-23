@@ -68,7 +68,7 @@
                 
             } else {
                 
-                res.json(user);
+                res.json(user[0]);
             }
         
         
@@ -78,6 +78,36 @@
     
     });
     
+    app.post("/facebook", function (req, res) {
+        
+        if (!req.body) return res.sendStatus(400);
+        
+        var query = "SELECT * FROM Users WHERE Uid=@Uid;";
+        dal.query(query, { "Uid": req.body.Uid }, function (user) {
+            if (user.length == 0) {
+                user = {
+                    "Name": req.body.Name,
+                    "Email": req.body.Name,
+                    "Token": req.body.Token,
+                    "Uid" : req.body.Uid
+                }
+                var query = "INSERT INTO Users Email=@Email, Token=@Token, Uid=@Uid;";
+                dal.query(query, user, function (user) {
+                    res.json(user.ops[0]);
+                });
+                
+            } else {
+                
+                res.json(user[0]);
+            }
+        
+        
+        });
+    
+    
+    
+    });
+
     
 
     app.post('/login', function (req, res) {

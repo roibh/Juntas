@@ -35,7 +35,8 @@ app.use(express.static('public'));
 var juntify = require('./classes/juntify.js'); 
 app.use('/juntify', juntify);
 
- 
+var monitor = require('./classes/monitor.js');
+app.use('/monitor', monitor);
 
 var user = require('./classes/user.js')(app);
 var tabs = require('./classes/tabs.js')(app);
@@ -148,6 +149,8 @@ io.on('connection', function (socket) {
         var pushObject = { "Date": new Date(), "Message": message, "UserId": userid };
         
         dal.pushObject(tabid, "Tabs", "Comments" , pushObject, function (data) {
+            console.log(pushObject)
+            console.log("to:" + tabid);
             io.to(tabid).emit("commentAdded", { "tabid": tabid , "comment": pushObject });
         });
        

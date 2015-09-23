@@ -12,72 +12,25 @@
     <script type="text/javascript" src="js/angular/angular-resource.js"></script>
 
 
-    <script type="text/javascript">
-        var tabId = "juntasTabId";
-
-        if (angular) {
-            angular.module("JuntasApp", ["ngResource"]).
-    controller("Redirector", function ($scope, $Config, $resource) {
-
-
-        $Config.ready(function () {
-
-            var res = $resource($Config.site.apiUrl + "Tabs");
-            res.get({ _id: tabId }, function (data) {
-
-                var g = {
-                    tab: data,
-                    config: { apiUrl: $Config.site.apiUrl }
-                }
-                var event = new CustomEvent("delegate tab", { detail: JSON.stringify(g) });
-                window.dispatchEvent(event);
-                document.getElementById("embedClick").click();
-
-            });
-
-
-        });
-
-
-
-        $scope.Install = function () {
-            chrome.webstore.install('https://chrome.google.com/webstore/detail/behimaeapdpdfokmhjahapambjidjdap', function (data) {
-                debugger
-            }, function (data) { debugger })
-
-        }
-
-    });
-        }
-        //window.onload = function () {
-        //    var cl = document.getElementById("embedClick");
-        //    if (window.location.href.indexOf("juntify") > -1) {
-
-        //        var event = new CustomEvent("FromPage", { detail: tabId });
-        //        window.dispatchEvent(event);
-        //        // document.activateJuntas();
-
-        //    }
-        //}
-        //
-
-
-
-    </script>
+    
 
 </head>
 <body data-ng-controller="Redirector">
     <a href="embedUrl" id="embedClick">Go there</a>
 
     <button ng-click="Install();" id="install-button">Add to Chrome</button>
-    <script>
-        debugger
+    
 
-        if (chrome.app.isInstalled) {
-            document.getElementById('install-button').style.display = 'none';
-        }
+   
+    <script type="text/javascript">
+        var tabId = "juntasTabId";
+
+        
+
+
+
     </script>
-
+    <script type="text/javascript" src="js/redirect.js"></script>
     <script type="text/javascript" src="js/config.js"></script>
 </body>
 </html>
