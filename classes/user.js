@@ -12,26 +12,7 @@
     
     
     
-    app.post('/find', function (req, res) {
-        var name = req.body.Name;
-        dal.connect(function (err, db) {
-            
-            
-            db.collection("Users").find({ "Email": { '$regex': name } }).toArray(function (err, arr) {
-                
-                
-                var x = arr;
-                var users = arr.map(function (a) {
-                    return { "Name": a.Email, "UserId": a._id };
-                })
-                res.status(200).json({ items: users });
 
-            })
-        
-        
-        })
-
-    });
     
     app.post('/feed', function (req, res) {
         var UserId = req.body.UserId;
@@ -49,10 +30,10 @@
 
     });
     
-    app.post("/oauth", function (req, res) { 
-
+    app.post("/oauth", function (req, res) {
+        
         if (!req.body) return res.sendStatus(400);
-    
+        
         var query = "SELECT * FROM Users WHERE Uid=@Uid;";
         dal.query(query, { "Uid": req.body.Uid }, function (user) {
             if (user.length == 0) {
@@ -63,7 +44,10 @@
                 }
                 var query = "INSERT INTO Users Email=@Email, Token=@Token, Uid=@Uid;";
                 dal.query(query, user, function (user) {
+                    mapRooms(user.ops[0]);
                     res.json(user.ops[0]);
+                    
+
                 });
                 
             } else {
@@ -107,14 +91,14 @@
     
     
     });
-
     
-
+    
+    
     app.post('/login', function (req, res) {
         
         if (!req.body) return res.sendStatus(400);
         
-       
+        
         //var api_token = req.headers["api_key"];
         //var device_id = req.headers["device_id"];
         
@@ -199,12 +183,12 @@
         
         // Convert our form input into JSON ready to store in Couchbase
         var jsonVersion = "{}";//returnJSONResults("", "");//JSON.stringify(req.body);
-       
+        
         
         var query = "SELECT * FROM Users WHERE Token=@Token";
-        dal.query(query, { "Token": token }, function (user) {            
-            if (user.length == 0) {                
-                user = { error: { message: "not found" } };                
+        dal.query(query, { "Token": token }, function (user) {
+            if (user.length == 0) {
+                user = { error: { message: "not found" } };
                 res.json(user);
             }
             else {
@@ -259,11 +243,20 @@
      
  
     });
-
-
-
- 
- 
+    
+    
+    
+    
+    function mapRooms(user) {
+        var query = "SELECT * FROM Tabs WHERE Followers in @Followers";
+        dal.query(query, { "Followers": [user._id] }, function (items) {            
+            for (var i = 0; i < items.length; i++) {
+                if (global.Rooms[items[i]._id] === undefined) {
+                    global.Rooms[items[i]._id] = items[i]
+                }
+            }          
+        });
+    }
     
   
 

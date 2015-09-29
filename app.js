@@ -56,7 +56,40 @@ global.Rooms = {};
 //});
 
 
-io.on('connection', function (socket) {  
+io.on('connection', function (socket) {
+    
+    
+    socket.on('juntas connect', function (data) {
+        
+        
+       
+            var query = "SELECT * FROM Tabs WHERE Followers in @Followers";
+            dal.query(query, { "Followers": [data.UserId] }, function (items) {
+            for (var i = 0; i < items.length; i++) {
+                var tid = items[i]._id.toString();
+                if(socket.rooms.indexOf(tid) === -1)
+                    socket.join(tid);
+                               
+                    if (global.Rooms[tid] === undefined) {
+                        global.Rooms[tid] = items[i]
+                    }
+                }
+            });
+        
+        
+        var tabid = data.TabId;
+        if (global.Rooms[tabid] !== undefined) {
+            
+            var pushObject = { "Date": new Date(), "UserId": data.UserId , "Url": data.Url };
+            
+            dal.pushObject(tabid, "Tabs", "History" , pushObject, function (data) {
+                io.to(tabid).emit("tab navigate", { "TabId": tabid , "Map": pushObject });
+               
+            });
+
+           
+        }
+    });
 
     socket.on('tab navigate', function (data) {
         
@@ -64,7 +97,7 @@ io.on('connection', function (socket) {
         
         
         var tabid = data.TabId;
-        if (Rooms[tabid] !== undefined) {
+        if (global.Rooms[tabid] !== undefined) {
             
             var pushObject = { "Date": new Date(), "UserId": data.UserId , "Url": data.Url };
             
@@ -80,8 +113,9 @@ io.on('connection', function (socket) {
     socket.on('tab connect', function (data, userid) {
         console.log(data);
         
-        var tabid = data._id;
-        socket.join(tabid);
+        var tabid = data._id.toString();
+        if (socket.rooms.indexOf(tabid) === -1)
+                socket.join(tabid);
         //if (Rooms[tabid] === undefined) {
             dal.getSingle("Tabs", tabid, function (result) {
                 if (result !== null) {
@@ -112,7 +146,7 @@ io.on('connection', function (socket) {
                 }
                     
                     
-                    Rooms[tabid] = result;
+                    global.Rooms[tabid] = result;
                     
                 }
             })
@@ -127,10 +161,13 @@ io.on('connection', function (socket) {
     
     socket.on('tab create', function (data) {
         
-        if (Rooms[data._id] === undefined)
-            Rooms[data._id] = data;
+        if (global.Rooms[data._id] === undefined)
+            global.Rooms[data._id] = data;
         socket.room = data._id;
-        socket.join(data._id);
+        
+        if (socket.rooms.indexOf(data._id) === -1)
+            socket.join(data._id);
+       
         
         
         dal.getSingle("Users", data.UserId, function (user) {
@@ -143,21 +180,22 @@ io.on('connection', function (socket) {
         console.log("created room: " + data);
     });
     
-    socket.on('post message', function (tabid, userid, message) {
-        
-        
-        var pushObject = { "Date": new Date(), "Message": message, "UserId": userid };
-        
+    
+    socket.on('page scroll', function (tabid, userid, details) {
+        io.to(tabid).emit("page scroll", { "tabid": tabid , "details": details });
+    
+    })
+    socket.on('post message', function (tabid, userid, message) {       
+        var pushObject = { "Date": new Date(), "Message": message, "UserId": userid };        
         dal.pushObject(tabid, "Tabs", "Comments" , pushObject, function (data) {
-            console.log(pushObject)
-            console.log("to:" + tabid);
             io.to(tabid).emit("commentAdded", { "tabid": tabid , "comment": pushObject });
-        });
-       
-         
+        });      
     });
     
-
+    socket.on('pop member', function (tabid, url, userid) {        
+        var pushObject = { "Date": new Date(), "Url": url, "UserId": userid };                 
+        io.to(tabid).emit("pop member", { "TabId": tabid , "Map": pushObject });            
+    });
 });
 
 

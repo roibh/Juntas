@@ -21,7 +21,7 @@
                 data.Followers.splice(data.Followers.indexOf(req.body.userId), 1);
                 var query = "INSERT INTO Tabs";
                 dal.query(query, data, function (tab) {
-                //res.json(tab.ops[0]);
+                    res.json(data);
              
             
                 });
@@ -59,7 +59,7 @@
     app.get('/tabs', function (req, res) {
         if (!req.query) return res.sendStatus(400);
         
-        var query = "SELECT * FROM Tabs WJERE _id=@_id";
+        var query = "SELECT * FROM Tabs WHERE _id=@_id";
         dal.getSingle("Tabs", req.query._id , function (tab) {
             res.json(tab);
         });
@@ -68,7 +68,61 @@
 
     });
     
+    app.get('/fillmytab', function (req, res) {
+        if (!req.query) return res.sendStatus(400);
+        
+        var query = "SELECT * FROM Tabs WHERE _id=@_id";
+        dal.getSingle("Tabs", req.query._id , function (tab) {
+            var finalObject = {};
+            dal.getSet(tab.Followers, "Users", function (data) {
+                
+                tab.Followers = {};
+                for (var i = 0; i < data.length; i++) {
+                    delete data[i].Password;
+                    
+                    tab.Followers[data[i]._id] = data[i];
+                   
+                }
+                res.json(tab);
+            });
+            
+
+             
+        });
+
+      
+
+    });
     
+    
+    app.post('/tabsconfiguration', function (req, res) {
+        if (!req.body) return res.sendStatus(400);
+        
+        // Convert our form input into JSON ready to store in Couchbase
+        var jsonVersion = "{}";//returnJSONResults("", "");//JSON.stringify(req.body);
+        
+        
+        
+        var query = "UPDATE Tabs SET Configuration=@Configuration";
+        dal.query(query, req.body, function (tab) {
+            res.json(tab.ops[0]);
+             
+            
+        });
+        
+        
+    // user.login(email, password,   function (user) { 
+    // 
+    //        if (user.error !== undefined ) return res.sendStatus(404);
+    //        
+    //       return res.json(user);
+    //     
+    //      
+    //     });
+    
+     
+ 
+    });
     app.post('/tabs', function (req, res) {
         if (!req.body) return res.sendStatus(400);
         
@@ -145,88 +199,48 @@
         });
 
     });
-    //app.post('/logout', function (req, res) {
-    //    if (!req.body) return res.sendStatus(400);
-        
-    //    if (api_token !== global.api_token) {
-    //        res.status(403).json({ "error": { message: "api_token is invalid" } });
-    //        return;
-             
-    //    }
-        
-        
-        
-        
-    //    var token = req.headers["token"];
-    //    api.validateUser(token, "Patients", function (err, PatientId) {
-    //        // Convert our form input into JSON ready to store in Couchbase
-    //        var jsonVersion = "{}";//returnJSONResults("", "");//JSON.stringify(req.body);
-    //        //var PatientId = req.body.PatientId;
-            
-    //        var query = "SELECT * FROM Patients WHERE _id=@_id";
-    //        dal.query(query, { "_id": PatientId }, function (user) {
-                
-    //            if (user.length == 0) {
-                    
-    //                user = { error: { message: "not found" } };
-                    
-    //                res.json(user);
-    //            }
-    //            else {
-    //                query = "UPDATE Patients SET Token=@Token WHERE _id=@_id";
-    //                dal.query(query, { "Token": null, "_id": user[0]._id }, function (user) {
-    //                    res.json({ "result": "ok" });
-    //                });
-    //            }
-    //        });
-   
-    //    });
-     
- 
-    //});
     
-    //app.post('/register', function (req, res) {
-    //    if (!req.body) return res.sendStatus(400);
-        
-    //    // Convert our form input into JSON ready to store in Couchbase
-    //    var jsonVersion = "{}";//returnJSONResults("", "");//JSON.stringify(req.body);
-    //    var email = req.body.Email;
-    //    var password = req.body.Password;
-    //    var user = req.body;
-    //    var query = "SELECT * FROM Users WHERE Email=@Email;";
-    //    dal.query(query, { "Email": user.Email }, function (exuser) {
-    //        if (exuser.length == 0) {
-                
-                
-    //            var query = "INSERT INTO Users Email=@Email,Password=@Password;";
-    //            dal.query(query, { "Email": user.Email , "Password": user.Password }, function (user) {
-    //                res.json(user.ops[0]);
-                    
-                
-    //            });
-                    
-                    
-
-              
-    //        }
-    //        else {
-    //            user = { error: { message: "user exists" } };
-    //            res.json(user);
-                 
-    //        }
-            
-           
-            
-
-
-    //    });
     
-     
- 
-    //});
+    app.post('/search', function (req, res) {
+        var name = req.body.Name;
+        dal.connect(function (err, db) {
+            
+            
+            db.collection("Users").find({ $or: [{ "Name": { '$regex': name } }, { "Email": { '$regex': name } }] }).toArray(function (err, arr) {
+                
+                
+                var x = arr;
+                var users = arr.map(function (a) {
+                    return { "Name": a.Email, "UserId": a._id };
+                })
+                
+                
+                db.collection("Tabs").find({
+                    $or: [
+                        { "Name": { '$regex': name } },
+                        { "Description": { '$regex': name } },
+                    ], 
+                    $and : [{ "Configuration.Discovery": { "$eq": "public" } }]
+                }).toArray(function (err, arr) {
+                    
+                    
+                    var x = arr;
+                    var tabs = arr.map(function (a) {
+                        return { "Name": a.Name, "_id": a._id,"Description": a.Description, "Followers": a.Followers ,  UserId: a.UserId };
+                    })
+                    
+                    res.status(200).json({ result: { users: users, tabs: tabs } });
+                })
+                
 
+               
 
+            })
+        
+        
+        })
 
+    });
  
  
     
