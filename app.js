@@ -12,10 +12,9 @@ var bodyParser = require('body-parser');
 var url = require('url');
 var querystring = require('querystring');
 var dal = require('./classes/dal.js');
-
 var config = require('./classes/config.js');
-
-
+var webshot = require('webshot');
+var moment = require('moment');
 
 
 var socket = require('socket.io');
@@ -32,7 +31,7 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors());
 app.use(express.static('public'));
-var juntify = require('./classes/juntify.js'); 
+var juntify = require('./classes/juntify.js');
 app.use('/juntify', juntify);
 
 var monitor = require('./classes/monitor.js');
@@ -56,25 +55,30 @@ global.Rooms = {};
 //});
 
 
+function url2filename(str)
+{
+    return str.split("?")[0].replace(/\//g, '').replace(/:/g, '').replace(/\./g, '');
+}
+
 io.on('connection', function (socket) {
     
     
     socket.on('juntas connect', function (data) {
         
         
-       
-            var query = "SELECT * FROM Tabs WHERE Followers in @Followers";
-            dal.query(query, { "Followers": [data.UserId] }, function (items) {
+        
+        var query = "SELECT * FROM Tabs WHERE Followers in @Followers";
+        dal.query(query, { "Followers": [data.UserId] }, function (items) {
             for (var i = 0; i < items.length; i++) {
                 var tid = items[i]._id.toString();
-                if(socket.rooms.indexOf(tid) === -1)
+                if (socket.rooms.indexOf(tid) === -1)
                     socket.join(tid);
-                               
-                    if (global.Rooms[tid] === undefined) {
-                        global.Rooms[tid] = items[i]
-                    }
+                
+                if (global.Rooms[tid] === undefined) {
+                    global.Rooms[tid] = items[i]
                 }
-            });
+            }
+        });
         
         
         var tabid = data.TabId;
@@ -90,23 +94,66 @@ io.on('connection', function (socket) {
            
         }
     });
-
+    
     socket.on('tab navigate', function (data) {
-        
-        
-        
-        
         var tabid = data.TabId;
         if (global.Rooms[tabid] !== undefined) {
+            var actionGuid = url2filename(data.Url);
             
-            var pushObject = { "Date": new Date(), "UserId": data.UserId , "Url": data.Url };
             
-            dal.pushObject(tabid, "Tabs", "History" , pushObject, function (data) {
-                io.to(tabid).emit("tab navigate", { "TabId": tabid , "Map": pushObject });
-               
-            });
+            
+            
+            
 
-           
+  
+            
+
+            var filepathfolder = moment().format("MM_YYYY") + "/" + actionGuid + ".png";
+            if (!fs.existsSync(path)) {
+                fs.createReadStream(path.resolve(__dirname, 'public/images/temp.png')).pipe(fs.createWriteStream("public/url_images/" + filepathfolder));
+                
+                var options = {
+                    renderDelay: 1000,
+                    screenSize: {
+                        width: 800
+                        , height: 600
+                    }
+                    , shotSize: {
+                        width: 800
+                        , height: 600
+                    }, zoomFactor: 0.50,
+                    userAgent: 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36'
+                }
+                
+                webshot(data.Url, "public/url_images/" + filepathfolder, options, function (err) {
+                
+                
+//                var gm = require('gm');
+                
+//                gm(__dirname + "\\public\\url_images\\" + filepathfolder)
+//.resize(200)
+//.autoOrient().write(__dirname + "\\public\\url_images\\" + filepathfolder, function (error) {
+//                    if (error) console.log('Error - ', error);
+//                });
+ 
+
+                });
+            }
+
+            var pushObject = { "Date": new Date(), "UserId": data.UserId , "Url": data.Url, "Thumb": filepathfolder };
+            io.to(tabid).emit("tab navigate", { "TabId": tabid , "Map": pushObject });
+            
+  
+       
+
+            dal.pushObject(tabid, "Tabs", "History" , pushObject, function (data) {
+                    
+            });
+            
+            
+            
+                      
+                 
         }
     });
     
@@ -115,41 +162,40 @@ io.on('connection', function (socket) {
         
         var tabid = data._id.toString();
         if (socket.rooms.indexOf(tabid) === -1)
-                socket.join(tabid);
+            socket.join(tabid);
         //if (Rooms[tabid] === undefined) {
-            dal.getSingle("Tabs", tabid, function (result) {
-                if (result !== null) {
-                    if (result.Followers === undefined)
-                        result.Followers = [];
-                    
-                    if (result.Followers.indexOf(userid) == -1) {
-                        result.Followers.push(userid)
-                        dal.pushObject(tabid, "Tabs", "Followers", userid, function (data) {
+        dal.getSingle("Tabs", tabid, function (result) {
+            if (result !== null) {
+                if (result.Followers === undefined)
+                    result.Followers = [];
+                
+                if (result.Followers.indexOf(userid) == -1) {
+                    result.Followers.push(userid)
+                    dal.pushObject(tabid, "Tabs", "Followers", userid, function (data) {
                         dal.getSingle("Users", userid, function (data) {
                             delete data.Password;
                             delete data.Token;
-                                                  
-                                io.to(tabid).emit("tab connected", { "TabId": tabid , "User": data });
-                            })
-                        
+                            
+                            io.to(tabid).emit("tab connected", { "TabId": tabid , "User": data });
                         })
+                        
+                    })
                 }
                 else {
                     dal.getSingle("Users", userid, function (data) {
-                        if (data.error === undefined)
-                         {
-                        delete data.Password;
-                        delete data.Token;
+                        if (data.error === undefined) {
+                            delete data.Password;
+                            delete data.Token;
                             io.to(tabid).emit("tab connected", { "TabId": tabid , "User": data });
                         }
                     })
                 }
+                
+                
+                global.Rooms[tabid] = result;
                     
-                    
-                    global.Rooms[tabid] = result;
-                    
-                }
-            })
+            }
+        })
 
         //}
         //else {
@@ -167,7 +213,7 @@ io.on('connection', function (socket) {
         
         if (socket.rooms.indexOf(data._id) === -1)
             socket.join(data._id);
-       
+        
         
         
         dal.getSingle("Users", data.UserId, function (user) {
@@ -176,7 +222,7 @@ io.on('connection', function (socket) {
             io.to(data._id).emit("tab connected", { "TabId": data._id , "User": user });
         })
         
-
+        
         console.log("created room: " + data);
     });
     
@@ -185,16 +231,16 @@ io.on('connection', function (socket) {
         io.to(tabid).emit("page scroll", { "tabid": tabid , "details": details });
     
     })
-    socket.on('post message', function (tabid, userid, message) {       
-        var pushObject = { "Date": new Date(), "Message": message, "UserId": userid };        
+    socket.on('post message', function (tabid, userid, message) {
+        var pushObject = { "Date": new Date(), "Message": message, "UserId": userid };
         dal.pushObject(tabid, "Tabs", "Comments" , pushObject, function (data) {
             io.to(tabid).emit("commentAdded", { "tabid": tabid , "comment": pushObject });
-        });      
+        });
     });
     
-    socket.on('pop member', function (tabid, url, userid) {        
-        var pushObject = { "Date": new Date(), "Url": url, "UserId": userid };                 
-        io.to(tabid).emit("pop member", { "TabId": tabid , "Map": pushObject });            
+    socket.on('pop member', function (tabid, url, userid) {
+        var pushObject = { "Date": new Date(), "Url": url, "UserId": userid };
+        io.to(tabid).emit("pop member", { "TabId": tabid , "Map": pushObject });
     });
 });
 

@@ -13,6 +13,32 @@
     
     
     
+    
+    app.post('/deletegroup', function (req, res) {
+        if (!req.body) return res.sendStatus(400);
+        var finalObject = {};
+        dal.deleteCollection("Tabs", req.body._id  , function (data) {
+            
+            res.json({ "result": "ok" });
+
+            //if (data.UserId !== req.body.userId) {
+            //    data.Followers.splice(data.Followers.indexOf(req.body.userId), 1);
+            //    var query = "INSERT INTO Tabs";
+            //    dal.query(query, data, function (tab) {
+            //        res.json(data);
+             
+            
+            //    });
+            //}
+             
+        
+        
+        
+        })
+
+    });
+    
+    
     app.post('/unsubscribefollowers', function (req, res) {
         if (!req.body) return res.sendStatus(400);
         var finalObject = {};
@@ -226,7 +252,7 @@
                     
                     var x = arr;
                     var tabs = arr.map(function (a) {
-                        return { "Name": a.Name, "_id": a._id,"Description": a.Description, "Followers": a.Followers ,  UserId: a.UserId };
+                        return { "Name": a.Name, "_id": a._id, "Description": a.Description, "Followers": a.Followers , UserId: a.UserId };
                     })
                     
                     res.status(200).json({ result: { users: users, tabs: tabs } });

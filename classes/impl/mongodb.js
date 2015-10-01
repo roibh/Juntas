@@ -229,7 +229,7 @@
         _connect(function (err, db) {
             assert.equal(null, err);
             
-            db.collection(collection).findAndRemove({ "id": id }, function (err, doc) {
+            db.collection(collection).findAndRemove({ "_id": ObjectID(id) }, function (err, doc) {
                 assert.equal(null, err);
                 
                 callback(doc);
