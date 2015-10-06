@@ -125,7 +125,7 @@
             
             if (user.length == 0) {
                 user = { error: { message: "user not found" } };
-                res.status(404).json(user);
+                res.json(user);
                 return;
             }
             else {

@@ -106,41 +106,56 @@ io.on('connection', function (socket) {
             
 
   
-            
+            var filepathbase =  moment().format("MM_YYYY") + "/" + actionGuid + ".png";
 
-            var filepathfolder = moment().format("MM_YYYY") + "/" + actionGuid + ".png";
-            if (!fs.existsSync(path)) {
-                fs.createReadStream(path.resolve(__dirname, 'public/images/temp.png')).pipe(fs.createWriteStream("public/url_images/" + filepathfolder));
+            var filepathfolder = "public/url_images/"  + filepathbase;
+            var filepathfolderdisc =    __dirname + "\\public\\url_images\\" +  moment().format("MM_YYYY") + "\\" + actionGuid + ".png";
+            var filepathfoldertemp = "public/url_images/" +  moment().format("MM_YYYY") + "/temp" + actionGuid + ".png";
+            var filepathfolderdisctemp = __dirname + "\\public\\url_images\\" + moment().format("MM_YYYY") + "\\temp" + actionGuid + ".png";
+            if (!fs.existsSync(filepathfolderdisc)) {
+                fs.createReadStream(path.resolve(__dirname, 'public/images/temp.png')).pipe(fs.createWriteStream(filepathfolder));
                 
                 var options = {
                     renderDelay: 1000,
                     screenSize: {
-                        width: 800
-                        , height: 600
+                        width: 400
+                        , height: 300
                     }
                     , shotSize: {
-                        width: 800
-                        , height: 600
+                        width: 400
+                        , height: 300
                     }, zoomFactor: 0.50,
                     userAgent: 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36'
                 }
                 
-                webshot(data.Url, "public/url_images/" + filepathfolder, options, function (err) {
-                
-                
-//                var gm = require('gm');
-                
-//                gm(__dirname + "\\public\\url_images\\" + filepathfolder)
-//.resize(200)
-//.autoOrient().write(__dirname + "\\public\\url_images\\" + filepathfolder, function (error) {
-//                    if (error) console.log('Error - ', error);
-//                });
+                webshot(data.Url, filepathfoldertemp, options, function (err) {
+                    
+                    
+                    
+                    var resizeCrop = require('resize-crop');
+                    
+                    resizeCrop(
+                        {
+                            format: 'jpg',
+                            src: filepathfoldertemp,
+                            dest: filepathfolder,
+                            height: 100,
+                            width: 100,
+                            gravity: "center"
+                        }, 
+    function (err, filePath) {
+        // do something 
+                            fs.unlinkSync(filepathfoldertemp);
+                        }
+                    );
+
+            
  
 
                 });
             }
 
-            var pushObject = { "Date": new Date(), "UserId": data.UserId , "Url": data.Url, "Thumb": filepathfolder };
+            var pushObject = { "Date": new Date(), "UserId": data.UserId , "Url": data.Url, "Thumb": filepathbase };
             io.to(tabid).emit("tab navigate", { "TabId": tabid , "Map": pushObject });
             
   

@@ -1,0 +1,226 @@
+﻿/* Include this file in your html if you are using the CSP mode. */
+
+@charset "UTF-8";
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak],
+.ng-cloak, .x-ng-cloak,
+.ng-hide {
+  display: none !important;
+}
+
+ng\:form {
+  display: block;
+}
+
+.ng-animate-block-transitions {
+  transition:0s all!important;
+  -webkit-transition:0s all!important;
+}
+
+/* show the element during a show/hide animation when the
+ * animation is ongoing, but the .ng-hide class is active */
+.ng-hide-add-active, .ng-hide-remove {
+  display: block!important;
+}
+
+body {
+	width: 800px;
+	height: 500px;
+	padding-top: 80px;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+ 
+	color: #9B99BD;
+}
+.panel-heading
+{
+	border-bottom: 1px solid #e5e3e3;
+}
+section
+{ 
+	clear: both;
+}
+
+.padding10
+{
+	padding-right: 10px;
+	padding-left: 10px;
+}
+.brandlogo
+{
+    width:48px;
+    height: 48px;
+}
+
+.login-panel
+{
+    width: 300px;
+    padding-top: 50px;
+    padding-right: 10px;
+	padding-left: 10px;
+
+}
+
+h3, .h3 
+{
+    font-size: 20px!important;
+
+}
+.plus
+{
+	cursor: pointer;
+	text-decoration: none;
+}
+.row-block
+{ width: 184px; float: right;
+}
+	section.rules ul li 
+	{
+		background-color: #f5f5ff;
+			border-bottom: 1px solid #e5e3e3;
+	}
+
+	section.properties ul li 
+	{
+		background-color: #f5f5ff;
+			border-bottom: 1px solid #e5e3e3;
+	}
+	section.properties ul li strong:first-child
+	{
+			background-color: #f5f555;
+	}
+
+.badge-btn
+{
+	display: inline-block;
+min-width: 10px;
+padding: 3px 7px;
+font-size: 12px;
+font-weight: bold;
+line-height: 1;
+color: #fff;
+text-align: center;
+white-space: nowrap;
+vertical-align: baseline;
+
+border-radius: 10px;
+}
+
+
+.rule-block
+{
+	padding: 5px ;
+	border-left: 3px solid #666666;
+}
+
+
+.input-group-values
+{
+	padding: 6px 12px;
+font-size: 14px;
+font-weight: normal;
+line-height: 1;
+text-align: left;
+background-color: #eee;
+border: 1px solid #ccc;
+border-radius: 0 4px 4px 0;
+display: table;
+background-color: inherit;
+}
+
+.clear
+{
+	width: 100%;
+	clear: both;
+}
+
+
+.input-group-addon,.input-group-value
+{
+	 font-size: 11px!important;
+}
+
+.input-group-values span,.input-group-values strong
+{
+	 font-size: 11px;
+}
+.input-group-value
+{
+padding: 6px 12px;
+font-size: 14px;
+font-weight: normal;
+line-height: 1;
+text-align: center;
+background-color: #eee;
+border: 1px solid #ccc;
+border-radius: 0 4px 4px 0;
+display: table-cell;
+background-color: inherit;
+}
+
+.hide
+{
+	display: none;
+}
+.small-abbr
+{
+	background-color: white!important;
+	padding-left: 5px;
+	font-size: 9px;
+}
+
+.property-block
+{
+	padding: 5px ;
+	border-left: 3px solid #CCCCCC;
+}
+
+ 
+.list-group
+{
+	margin-bottom: 0px!important;
+	margin-top: 0px!important;
+
+}
+	div.file-header
+	{
+		padding: 5px ;
+		background-color: #f5f5f5;
+			border-bottom: 1px solid #e5e3e3;
+			border-left: 3px solid #000000;
+	}
+#scroll
+{
+	max-height: 400px;
+	overflow: auto;
+	padding: 5px;
+}
+.collapseandscroll
+{
+	display: none;
+}
+
+ul
+{
+	margin: 0px; padding: 0px;
+	list-style-type: none;
+	margin-top: 3px!important;
+}
+
+li.filenode
+{
+	border: 1px solid #908AFF;
+	padding: 3px;
+	margin: 3px;
+}
+
+.loaded
+{
+	background-color: green;
+	color: #fff;
+		
+}
+
+.forceltr
+{
+    direction: ltr!important;
+}
