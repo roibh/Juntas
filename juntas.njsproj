@@ -37,11 +37,12 @@
     <Compile Include="classes\dataStudio.js" />
     <Compile Include="classes\impl\couchbase.js" />
     <Compile Include="classes\impl\mongodb.js" />
-    <Compile Include="classes\monitor.js" />
-    <Compile Include="classes\tabs.js" />
-    <Compile Include="classes\user.js" />
+    <Compile Include="classes\Socket.js" />
+    <Compile Include="routes\monitor.js" />
+    <Compile Include="routes\tabs.js" />
+    <Compile Include="routes\user.js" />
     <Compile Include="classes\webServer.js" />
-    <Compile Include="classes\juntify.js" />
+    <Compile Include="routes\juntify.js" />
     <Compile Include="public\css\js\m-dropdown.min.js" />
     <Compile Include="public\js\fbScript.js" />
     <Compile Include="public\js\redirect.js" />
