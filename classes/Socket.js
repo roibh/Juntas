@@ -10,7 +10,7 @@
     var dal = require('./dal');
     
     var moment = require('moment');
-    
+    var thumbler = require('./thumbler.js');
     var ObjectID = require("mongodb").ObjectID;
     
     
@@ -53,77 +53,21 @@
         socket.on('tab navigate', function (data) {
             var tabid = data.TabId;
             if (global.Rooms[tabid] !== undefined) {
-                var actionGuid = url2filename(data.Url);
-                
-                
-                
-                
-                
-                
-                
+                var actionGuid = thumbler.url2filename(data.Url);
+                thumbler.capture(data, actionGuid);
                 var filepathbase = moment().format("MM_YYYY") + "/" + actionGuid + ".png";
-                
-                var filepathfolder = "public/url_images/" + filepathbase;
-                var filepathfolderdisc = global.appRoot + "\\public\\url_images\\" + moment().format("MM_YYYY") + "\\" + actionGuid + ".png";
-                var filepathfoldertemp = "public/url_images/" + moment().format("MM_YYYY") + "/temp" + actionGuid + ".png";
-                var filepathfolderdisctemp = global.appRoot + "\\public\\url_images\\" + moment().format("MM_YYYY") + "\\temp" + actionGuid + ".png";
-                if (!fs.existsSync(filepathfolderdisc)) {
-                    fs.createReadStream(path.resolve(global.appRoot, 'public/images/temp.png')).pipe(fs.createWriteStream(filepathfolder));
-                    
-                    var options = {
-                        renderDelay: 1000,
-                        screenSize: {
-                            width: 400
-                            , height: 300
-                        }
-                        , shotSize: {
-                            width: 400
-                            , height: 300
-                        }, zoomFactor: 0.50,
-                        userAgent: 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36'
-                    }
-                    
-                    webshot(data.Url, filepathfoldertemp, options, function (err) {
-                        
-                        
-                        
-                        var resizeCrop = require('resize-crop');
-                        
-                        resizeCrop(
-                            {
-                                format: 'jpg',
-                                src: filepathfoldertemp,
-                                dest: filepathfolder,
-                                height: 100,
-                                width: 100,
-                                gravity: "center"
-                            }, 
-    function (err, filePath) {
-                                // do something 
-                                fs.unlinkSync(filepathfoldertemp);
-                            }
-                        );
-
-            
- 
-
-                    });
-                }
-               
                 var pushObject = { "Date": new Date(), "UserId": data.UserId , "Url": data.Url, "Thumb": filepathbase, "TabId": tabid };
                 io.to(tabid).emit("tab navigate", { "TabId": tabid , "Map": pushObject });
-                
-                
-                
-                
-                dal.query("INSERT INTO History", pushObject, function (data) {
+                dal.connect(function (err, db) {
+                    db.collection("History").findOne({ "Url": pushObject.Url, "UserId": pushObject.UserId, "TabId": pushObject.TabId }, function (err, data) { 
+                    if(data=== null)
+                        dal.query("INSERT INTO History", pushObject, function (data) {
                     
-                });
-            
-            
-            
-                      
-                 
+                        });
+                    })
+                
+                })
+               
             }
         });
         
@@ -223,9 +167,7 @@
     });
 }
 
-function url2filename(str) {
-    return str.split("?")[0].replace(/\//g, '').replace(/:/g, '').replace(/\./g, '');
-}
+
 
 
 module.exports = socketuse;

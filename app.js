@@ -13,7 +13,7 @@ var url = require('url');
 var querystring = require('querystring');
 var dal = require('./classes/dal.js');
 var config = require('./classes/config.js');
-var webshot = require('webshot');
+
 var moment = require('moment');
 var SocketUse = require('./classes/socket.js');
 
@@ -30,20 +30,35 @@ var socket = require('socket.io');
 var io = socket.listen(server);
 SocketUse(io);
 
-app.use(bodyParser.json({ limit: '50mb' }));
+ 
+
+
+var regexIso8601 = /^(\d{4}|\+\d{6})(?:-(\d{2})(?:-(\d{2})(?:T(\d{2}):(\d{2}):(\d{2})\.(\d{1,})(Z|([\-+])(\d{2}):(\d{2}))?)?)?)?$/;
+app.use(bodyParser.json({
+    reviver: function (key, value) {
+        var match;
+        if (typeof value === "string" && (match = value.match(regexIso8601))) {
+            var milliseconds = Date.parse(match[0]);
+            if (!isNaN(milliseconds)) {
+                return new Date(milliseconds);
+            }
+        }
+        return value;
+    },
+    limit: '50mb',
+}))
+
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors());
 app.use(express.static('public'));
-
-
-
-
 app.use("/juntify", require('./routes/juntify.js'));
 app.use("/monitor", require('./routes/monitor.js'));
 app.use("/user", require('./routes/user.js'));
 app.use("/tabs", require('./routes/tabs.js'));
  
  
+
+
 
  
 console.log("init complete");
