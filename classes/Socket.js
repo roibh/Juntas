@@ -11,6 +11,9 @@
     
     var moment = require('moment');
     var thumbler = require('./thumbler.js');
+    var verifier = require('./verifier.js');
+    
+    
     var ObjectID = require("mongodb").ObjectID;
     
     
@@ -53,20 +56,39 @@
         socket.on('tab navigate', function (data) {
             var tabid = data.TabId;
             if (global.Rooms[tabid] !== undefined) {
-                var actionGuid = thumbler.url2filename(data.Url);
-                thumbler.capture(data, actionGuid);
-                var filepathbase = moment().format("MM_YYYY") + "/" + actionGuid + ".png";
-                var pushObject = { "Date": new Date(), "UserId": data.UserId , "Url": data.Url, "Thumb": filepathbase, "TabId": tabid };
-                io.to(tabid).emit("tab navigate", { "TabId": tabid , "Map": pushObject });
-                dal.connect(function (err, db) {
-                    db.collection("History").findOne({ "Url": pushObject.Url, "UserId": pushObject.UserId, "TabId": pushObject.TabId }, function (err, data) { 
-                    if(data=== null)
-                        dal.query("INSERT INTO History", pushObject, function (data) {
-                    
+                
+                verifier.verify(data, function (metadata) {
+                    var actionGuid = thumbler.url2filename(data.Url);
+                    var filepathbase = moment().format("MM_YYYY") + "/" + actionGuid + ".png";
+                    if (metadata["og:image"] !== undefined) {
+                        filepathbase = metadata["og:image"];
+                    }
+                    else {
+                        thumbler.capture(data, actionGuid, function () {
+                            io.to(tabid).emit("image captured", { "TabId": tabid, "FileName": filepathbase });
                         });
+                    }
+                    if (metadata["title"] !== undefined) {
+                        data.Title = metadata["title"];
+                    }
+                    
+                    
+                    var pushObject = {"Title": data.Title,  "Date": new Date(), "UserId": data.UserId , "Url": data.Url, "Thumb": filepathbase, "TabId": tabid };
+                    io.to(tabid).emit("tab navigate", { "TabId": tabid , "Map": pushObject });
+                    dal.connect(function (err, db) {
+                        db.collection("History").findOne({"Url": pushObject.Url, "UserId": pushObject.UserId, "TabId": pushObject.TabId }, function (err, data) {
+                            if (data === null)
+                                dal.query("INSERT INTO History", pushObject, function (data) {
+                    
+                                });
+                        })
+                
                     })
                 
                 })
+                
+
+           
                
             }
         });

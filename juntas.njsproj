@@ -38,6 +38,7 @@
     <Compile Include="classes\impl\couchbase.js" />
     <Compile Include="classes\impl\mongodb.js" />
     <Compile Include="classes\Socket.js" />
+    <Compile Include="classes\verifier.js" />
     <Compile Include="classes\thumbler.js" />
     <Compile Include="routes\monitor.js" />
     <Compile Include="routes\tabs.js" />

@@ -10,8 +10,8 @@ var thumbler = function () {
     var dal = require('./dal');
     var webshot = require('webshot');
     var moment = require('moment');
-
-    this.capture = function(data, actionGuid) {
+    
+    this.capture = function (data, actionGuid, finishcallback) {
         
         var tabid = data.TabId;
         
@@ -32,21 +32,48 @@ var thumbler = function () {
         if (!fs.existsSync(slidedir)) {
             fs.mkdirSync(slidedir);
         }
-
+        
         if (!fs.existsSync(filepathfolderdisc)) {
+            
+            
+           
+            
+            
+
+            
+           
+           
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+
             fs.createReadStream(path.resolve(global.appRoot, 'public/images/temp.png')).pipe(fs.createWriteStream(filepathfolder));
             fs.createReadStream(path.resolve(global.appRoot, 'public/images/temp.png')).pipe(fs.createWriteStream(filepathfolder.replace('url_images', 'slide_images')));
             
             var options = {
-                renderDelay: 1000,
+                renderDelay: 5000,
                 screenSize: {
-                    width: 400
-                    , height: 300
+                    width: 1024
+                    , height: 768
                 }
                 , shotSize: {
-                    width: 400
-                    , height: 300
-                }, zoomFactor: 0.50,
+                    width: 1024
+                    , height: 768
+                }, zoomFactor: 1,
                 userAgent: 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36'
             }
             
@@ -54,7 +81,7 @@ var thumbler = function () {
                 
                 if (!fs.existsSync(filepathfolderdisctemp))
                     return;
-
+                
                 
                 var resizeCrop = require('resize-crop');
                 
@@ -81,6 +108,8 @@ var thumbler = function () {
     function (err, filePath) {
                                 // do something 
                                 fs.unlinkSync(filepathfoldertemp);
+                                finishcallback();
+
                             }
                         );
                         
@@ -97,15 +126,15 @@ var thumbler = function () {
         }
 
     }
-
+    
     this.url2filename = function (str) {
-         
+        
         return str.hashCode();//.split("?")[0].replace(/\//g, '').replace(/:/g, '').replace(/\./g, '');
     }
     
-  
     
-
+    
+    
     return this;
 }()
 
