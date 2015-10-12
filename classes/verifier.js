@@ -22,7 +22,7 @@ var verifier = function () {
         var request = require('request')
         var url = data.Url;
         
-        var urlkey = url.hashCode();
+        var urlkey = this.url2filename(url);
 
         dal.connect(function (err, db) {
         

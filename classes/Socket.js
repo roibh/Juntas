@@ -8,7 +8,7 @@
     
     var path = require('path');
     var dal = require('./dal');
-    
+    var ObjectID = require("mongodb").ObjectID;
     var moment = require('moment');
     var thumbler = require('./thumbler.js');
     var verifier = require('./verifier.js');
@@ -47,9 +47,7 @@
                 dal.pushObject(tabid, "Tabs", "History" , pushObject, function (data) {
                     io.to(tabid).emit("tab navigate", { "TabId": tabid , "Map": pushObject });
                
-                });
-
-           
+                });           
             }
         });
         
@@ -72,24 +70,18 @@
                         data.Title = metadata["title"];
                     }
                     
+                    var _id = new ObjectID();
                     
-                    var pushObject = {"Title": data.Title,  "Date": new Date(), "UserId": data.UserId , "Url": data.Url, "Thumb": filepathbase, "TabId": tabid };
+                    var pushObject = {"_id" : _id, "hash": actionGuid,  "Title": data.Title, "Date": new Date(), "UserId": data.UserId , "Url": data.Url, "Thumb": filepathbase, "TabId": tabid };
                     io.to(tabid).emit("tab navigate", { "TabId": tabid , "Map": pushObject });
                     dal.connect(function (err, db) {
-                        db.collection("History").findOne({"Url": pushObject.Url, "UserId": pushObject.UserId, "TabId": pushObject.TabId }, function (err, data) {
+                        db.collection("History").findOne({ "hash": pushObject.hash, "UserId": pushObject.UserId, "TabId": pushObject.TabId }, function (err, data) {
                             if (data === null)
-                                dal.query("INSERT INTO History", pushObject, function (data) {
-                    
+                                dal.query("INSERT INTO History", pushObject, function (data) {                    
                                 });
-                        })
-                
-                    })
-                
-                })
-                
-
-           
-               
+                        })                
+                    })                
+                })               
             }
         });
         
@@ -107,10 +99,16 @@
                     
                     if (result.Followers.indexOf(userid) == -1) {
                         result.Followers.push(userid)
-                        dal.pushObject(tabid, "Tabs", "Followers", userid, function (data) {
+                        dal.pushObject(ObjectID(tabid), "Tabs", "Followers", userid, function (data) {
                             dal.getSingle("Users", userid, function (data) {
                                 delete data.Password;
                                 delete data.Token;
+                                
+                                
+                                
+                                
+                                
+
                                 
                                 io.to(tabid).emit("tab connected", { "TabId": tabid , "User": data });
                             })
@@ -118,7 +116,7 @@
                         })
                     }
                     else {
-                        dal.getSingle("Users", userid, function (data) {
+                        dal.getSingle("Users", ObjectID(userid), function (data) {
                             if (data.error === undefined) {
                                 delete data.Password;
                                 delete data.Token;
@@ -132,13 +130,6 @@
                     
                 }
             })
-
-        //}
-        //else {
-        //    socket.join(data._id);
-        //}
-        
-
         });
         
         socket.on('tab create', function (data) {
@@ -160,8 +151,7 @@
             
             
             console.log("created room: " + data);
-        });
-        
+        });        
         
         socket.on('page scroll', function (tabid, userid, details) {
             io.to(tabid).emit("page scroll", { "tabid": tabid , "details": details });
@@ -186,6 +176,40 @@
             var pushObject = { "Date": new Date(), "Url": url, "UserId": userid };
             io.to(tabid).emit("pop member", { "TabId": tabid , "Map": pushObject });
         });
+        
+        socket.on('delete history', function (tabid, userid, id) {          
+            dal.connect(function (err, db) {
+                db.collection("History").remove({ "_id": ObjectID(id) }, function () {
+                    io.to(tabid).emit("delete history", { "TabId": tabid , "_id": id });
+                })
+            })
+            
+        
+
+           
+        });        
+        
+        socket.on('like url', function (tabid, userid, hash, rate, ratetext) {
+            var pushObject = {"TabId": tabid, "UserId": userid };
+            dal.connect(function (err, db) {
+                
+                var pusher = {};
+                pusher["Likes"] = pushObject;
+                db.collection("Metadata").update({ 'hash': hash }, { $addToSet: pusher }, function (err, data) {
+                    
+                    io.to(tabid).emit("like url", { "TabId": tabid , "Map":pushObject });
+                });
+
+             
+            
+            });
+            
+             
+         
+
+           
+        });
+
     });
 }
 

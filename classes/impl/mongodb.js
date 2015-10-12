@@ -80,13 +80,13 @@
                 //res.values["id"] = actionGuid;
                 res.collection = x[i + 1];
                 res.values = params;
-                //var pairs = str.split("INTO " + res.collection)[1].split(",");
-                //for (var j = 0; j < pairs.length; j++) {
-                //    var triple = pairs[j].split("=");
-                //    res.values[triple[0].trim()] = params[triple[0].trim()];
+//var pairs = str.split("INTO " + res.collection)[1].split(",");
+//for (var j = 0; j < pairs.length; j++) {
+//    var triple = pairs[j].split("=");
+//    res.values[triple[0].trim()] = params[triple[0].trim()];
 
 
-                //}
+//}
             }
             if (x[i] == "WHERE") {
                 var conditionPoint = res.where;
@@ -125,7 +125,7 @@
                         res.where[cleankey] = params[cleankey];
                     }
 
-                   
+
 
 
                 }
@@ -182,9 +182,9 @@
                     callback(doc);
             });
 
-           
+
         });
-      
+
     }
     
     this.db = null;
@@ -239,40 +239,75 @@
     
     
     
+    function _addToSet(id, collection, propertyName, pushObject, callback) {
+        _connect(function (err, db) {
+            assert.equal(null, err);
+            
+            var pusher = {};
+            pusher[propertyName] = pushObject;
+            db.collection(collection).update({ _id: id }, { $addToSet: pusher }, function (err, data) {
+                
+                callback(data);
+            });
+
+
+
+        });
+
+
+
+    }
+    
+    
     function _pushObject(id, collection, propertyName, pushObject, callback) {
         _connect(function (err, db) {
             assert.equal(null, err);
             
             var pusher = {};
             pusher[propertyName] = pushObject;
-            db.collection(collection).update({ _id: ObjectID(id) }, { $push: pusher }, function (err, data) {
+            db.collection(collection).update({ _id: id }, { $push: pusher }, function (err, data) {
                 
                 callback(data);
             });
 
 
-            
+
         });
 
 
 
     }
+    
+    function _pullObject(id, collection, propertyName, pullObject, callback) {
+        _connect(function (err, db) {
+            assert.equal(null, err);
+            var puller = {};
+            
+            puller[propertyName] = pullObject;
+            
+            db.collection(collection).update({ _id: id }, { $pull: puller }, function (err, data) {
+                callback(data);
+            });
+        });
+    }
+    
+    
     
     function _getSet(idArr, collection, callback) {
         _connect(function (err, db) {
             assert.equal(null, err);
             for (var i = 0; i < idArr.length; i++) {
                 idArr[i] = ObjectID(idArr[i]);
-            }    
-            db.collection(collection).find({ _id: { "$in": idArr }}).toArray(function (err, data) {                
+            }
+            db.collection(collection).find({ _id: { "$in": idArr } }).toArray(function (err, data) {
                 callback(data);
-            });            
+            });
         });
     }
     
     
     
-
+    
     function _query(queryStr, params, callback) {
         var oQuery = parse(queryStr, params);
         
@@ -341,17 +376,12 @@
                     if (oQuery.limit === undefined)
                         oQuery.limit = 0;
                     
-                    
-                    
-                    cursor.limit(oQuery.limit).each(function (err, doc) {
+                    db.collection(oQuery.collection).find(oQuery.where).limit(oQuery.limit).toArray(function (err, retArr) {
                         assert.equal(err, null);
-                        if (doc != null) {
-                            retArr.push(doc);
+                        callback(retArr);
+                    });;
+                    
                      
-                        } else {
-                            callback(retArr)
-                        }
-                    });
                     break;
             }
         });
@@ -369,7 +399,9 @@
         saveSchema: _saveSchema,
         getSchema: _getSchema,
         pushObject: _pushObject,
-        getSet: _getSet
+        getSet: _getSet,
+        pullObject: _pullObject,
+        addToSet: _addToSet
      
     };
 })();

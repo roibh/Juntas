@@ -52,6 +52,15 @@
         impl.pushObject(id, collectionName, propertyName, pushObject, callback);
     }
     
+    function _pullObject(id, collectionName, propertyName, pullObject, callback) {
+        impl.pullObject(id, collectionName, propertyName, pullObject, callback);
+    }
+ 
+    
+    function _addToSet(id, collectionName, propertyName, pushObject, callback) {
+        impl.addToSet(id, collectionName, propertyName, pushObject, callback);
+    }
+
     function _getSet(idArr, collection, callback) {
         impl.getSet(idArr, collection, callback);
     }
@@ -66,7 +75,9 @@
         getSingle: _getSingle,
         getCollection: _getCollection,
         pushObject: _pushObject,
-        getSet: _getSet
+        getSet: _getSet,
+        pullObject: _pullObject,
+        addToSet: _addToSet
     };
 })();
 // node.js module export

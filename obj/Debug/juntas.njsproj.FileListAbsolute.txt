@@ -1,1 +1,2 @@
 c:\nodeProjects\juntas\juntas\bin\Microsoft.NodejsTools.WebRole.dll
+C:\nodeProjects\juntas\juntas\obj\Debug\juntas.njsprojResolveAssemblyReference.cache

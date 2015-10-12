@@ -24,19 +24,32 @@ router.get('/*', function (req, res) {
             res.status(404);
         else {
             var obj = data[0];
-            
-            var lastPage = obj.History[obj.History.length - 1];
-            
-            var text = fs.readFileSync(global.appRoot + '\\public\\redirect.html', 'utf8');
-            text = text.replace("embedUrl", lastPage.Url);
-            text = text.replace("juntasTabId", tabid);
-            
+            //ObjectID(tabid)
+            dal.connect(function (err, db) {
+                db.collection("History").findOne({ $query: { "TabId": tabid }, $orderby: { Date : -1 } }, function (result) {
+                    if (result === null)
+                        result = { "Url": "http://www.google.com" };
 
-            res.send(text);
+                    var text = fs.readFileSync(global.appRoot + '\\public\\redirect.html', 'utf8');
+                    text = text.replace("embedUrl", result.Url);
+                    text = text.replace("juntasTabId", tabid);
+                    
+                    
+                    res.send(text);
+                
+                
+                });
+            
+            });
+            
+            
+            
+           
+   
              
-        }
-    });
-  
+}
+});
+
 
 });
 
