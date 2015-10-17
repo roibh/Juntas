@@ -1,0 +1,85 @@
+init complete
+{ _id: '56088489bb71ac3436020c82',
+  Name: '222',
+  UserId: '5602784c9a06dba04ebcb066',
+  TabId: 2,
+  Configuration: { Discovery: 'public', AllowPop: true },
+  Comments: 
+   [ { Date: '2015-09-28T00:06:33.275Z',
+       Message: 'Welcome',
+       UserId: '5602784c9a06dba04ebcb066' } ],
+  Followers: 
+   { '5602784c9a06dba04ebcb066': 
+      { _id: '5602784c9a06dba04ebcb066',
+        Email: 'juntasonline@gmail.com',
+        Token: null,
+        Uid: '106335138124343585334' },
+     '5602ace709dba63c99373f61': 
+      { _id: '5602ace709dba63c99373f61',
+        Name: 'Roi Ben Haim',
+        Email: 'Roi Ben Haim',
+        Token: 'CAAW7Ob3Px8kBAH7GZAu8eARs319UZA4Bgrrj254HQ5OZCrRasy1ggklhDvwfqdZCir0Gij4otidwzIJLlWLqM2MeH9yJsyHAzE3ehYoz1OyfNpw8vyRMt03Y0Am2hoKKZCnQ5tEEr1ygcl5L8QUXRIhJyhaOjEW7hijQEsHy63HK1OLVOv7ipY6GRoGItjvoVJykrITGyua5NREvtk0I8',
+        Uid: '1175256469158261' } },
+  History: 
+   [ { Date: '2015-09-28T00:06:33.275Z',
+       Url: 'chrome://newtab/',
+       UserId: '5602784c9a06dba04ebcb066' } ],
+  map: 
+   [ { Url: 'chrome://newtab/',
+       Title: 'New Tab',
+       Created: '2015-09-28T00:06:33.275Z' } ] }
+updated document from Users
+inserted document from Tabs
+created room: [object Object]
+{ _id: '560ace2766fa88943e40f123',
+  Name: 'new group',
+  UserId: '5602784c9a06dba04ebcb066',
+  TabId: 4,
+  Configuration: { Discovery: 'public', AllowPop: true },
+  Comments: 
+   [ { Date: '2015-09-29T17:45:11.975Z',
+       Message: 'Welcome',
+       UserId: '5602784c9a06dba04ebcb066' } ],
+  Followers: 
+   { '5602784c9a06dba04ebcb066': 
+      { _id: '5602784c9a06dba04ebcb066',
+        Email: 'juntasonline@gmail.com',
+        Token: null,
+        Uid: '106335138124343585334' } },
+  History: 
+   [ { Date: '2015-09-29T17:45:11.975Z',
+       Url: 'chrome://newtab/',
+       UserId: '5602784c9a06dba04ebcb066' } ],
+  map: 
+   [ { Url: 'chrome://newtab/',
+       Title: 'New Tab',
+       Created: '2015-09-29T17:45:11.975Z' } ] }
+{ _id: '560ace2766fa88943e40f123',
+  Name: 'new group',
+  UserId: '5602784c9a06dba04ebcb066',
+  TabId: 1010,
+  Configuration: { Discovery: 'public', AllowPop: true },
+  Comments: 
+   [ { Date: '2015-09-29T17:45:11.975Z',
+       Message: 'Welcome',
+       UserId: '5602784c9a06dba04ebcb066' } ],
+  Followers: 
+   { '5602784c9a06dba04ebcb066': 
+      { _id: '5602784c9a06dba04ebcb066',
+        Email: 'juntasonline@gmail.com',
+        Token: null,
+        Uid: '106335138124343585334' } },
+  History: 
+   [ { Date: '2015-09-29T17:45:11.975Z',
+       Url: 'chrome://newtab/',
+       UserId: '5602784c9a06dba04ebcb066' },
+     { Date: '2015-09-29T17:46:08.203Z',
+       UserId: '5602784c9a06dba04ebcb066',
+       Url: 'https://www.youtube.com/' },
+     { Date: '2015-09-29T17:46:09.731Z',
+       UserId: '5602784c9a06dba04ebcb066',
+       Url: 'https://www.youtube.com/' } ],
+  map: 
+   [ { Url: 'chrome://newtab/',
+       Title: 'New Tab',
+       Created: '2015-09-29T17:45:11.975Z' } ] }

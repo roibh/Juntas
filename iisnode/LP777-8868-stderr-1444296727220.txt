@@ -1,0 +1,12 @@
+Missing error handler on `socket`.
+ReferenceError: webshot is not defined
+    at Socket.<anonymous> (C:\nodeProjects\juntas\juntas\classes\socket.js:86:21)
+    at emitOne (events.js:77:13)
+    at Socket.emit (events.js:169:7)
+    at Socket.onevent (C:\nodeProjects\juntas\juntas\node_modules\socket.io\lib\socket.js:330:8)
+    at Socket.onpacket (C:\nodeProjects\juntas\juntas\node_modules\socket.io\lib\socket.js:290:12)
+    at Client.ondecoded (C:\nodeProjects\juntas\juntas\node_modules\socket.io\lib\client.js:193:14)
+    at Decoder.Emitter.emit (C:\nodeProjects\juntas\juntas\node_modules\socket.io\node_modules\socket.io-parser\node_modules\component-emitter\index.js:134:20)
+    at Decoder.add (C:\nodeProjects\juntas\juntas\node_modules\socket.io\node_modules\socket.io-parser\index.js:247:12)
+    at Client.ondata (C:\nodeProjects\juntas\juntas\node_modules\socket.io\lib\client.js:175:18)
+    at emitOne (events.js:77:13)

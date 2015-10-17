@@ -40,6 +40,7 @@
     <Compile Include="classes\Socket.js" />
     <Compile Include="classes\verifier.js" />
     <Compile Include="classes\thumbler.js" />
+    <Compile Include="public\js\start.js" />
     <Compile Include="routes\monitor.js" />
     <Compile Include="routes\tabs.js" />
     <Compile Include="routes\user.js" />
@@ -490,6 +491,7 @@
     <Content Include="public\js\components\qp-stuff\paper-tabs\paper-tabs.html" />
     <Content Include="public\js\components\qp-stuff\paper-tabs\README.md" />
     <Content Include="public\juntas.png" />
+    <Content Include="public\start.html" />
     <Content Include="public\redirect.html" />
     <Content Include="public\stylesheets\style.styl" />
     <Content Include="README.md" />

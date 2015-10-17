@@ -61,7 +61,7 @@ var verifier = function () {
                             
                         }
                         
-                        if (ttag.length > 0)
+                        if (ttag.length > 0 && ttag[0].children.length > 0)
                             saveObject["title"] = ttag[0].children[0].data;// ttag.children[0].data;
 
                         db.collection("Metadata").save(saveObject, function (err, result) { 

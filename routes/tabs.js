@@ -218,7 +218,7 @@ router.post('/tabs', function (req, res) {
      
  
 });
-router.post('/followedfeeds', function (req, res) {
+router.get('/followedfeeds', function (req, res) {
     if (!req.body) return res.sendStatus(400);
     
     // Convert our form input into JSON ready to store in Couchbase
@@ -227,7 +227,7 @@ router.post('/followedfeeds', function (req, res) {
     
     
     var query = "SELECT * FROM Tabs WHERE Followers in @Followers";
-    dal.query(query, { "Followers": [req.body.UserId] }, function (items) {
+    dal.query(query, { "Followers": [req.query.UserId] }, function (items) {
         res.json({ items: items });
             
 

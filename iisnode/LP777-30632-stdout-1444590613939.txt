@@ -1,0 +1,12 @@
+init complete
+inserted document from Tabs
+inserted document from Comments
+created room: [object Object]
+inserted document from Tabs
+inserted document from Comments
+updated document from Users
+inserted document from Users
+inserted document from Tabs
+inserted document from Tabs
+inserted document from Tabs
+inserted document from Comments
