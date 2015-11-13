@@ -5,7 +5,7 @@
     "appRoot": "/",
     "couchBase": "",
        
-    "mongodb": { "host": "mongodb://localhost:27017/juntas" },
+   "mongodb": { "host": "mongodb://juntas:juntas$sa@ds049624.mongolab.com:49624/juntas" },
     "mimeTypes": { ".html": "text/html",
         ".css": "text/css",
         ".js": "text/javascript",

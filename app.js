@@ -20,12 +20,12 @@ var SocketUse = require('./classes/socket.js');
 
 
 var app = express();
-http = require('http');
+var http = require('http');
 
 var activeport = config.appSettings().port
 if (process.env.PORT !== undefined)
     activeport = process.env.PORT;
-server = http.createServer(app).listen(activeport);
+var server = http.createServer(app).listen(activeport);
 var socket = require('socket.io');
 var io = socket.listen(server);
 SocketUse(io);
@@ -50,6 +50,7 @@ app.use(bodyParser.json({
 
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors());
+app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use("/juntify", require('./routes/juntify.js'));
 app.use("/monitor", require('./routes/monitor.js'));
@@ -62,23 +63,6 @@ app.use("/tabs", require('./routes/tabs.js'));
 
  
 console.log("init complete");
+console.log("juntas is online at cloud9");
 global.Rooms = {};
-//io.configure(function () {
-//    io.set('transports', ['websocket']);
-//    if (process.env.IISNODE_VERSION) {
-//        // If this node.js application is hosted in IIS, assume it is hosted 
-//        // in IIS virtual directory named 'dante' and set up the socket.io's resource
-//        // value for socket.io to recognize requests that target it. 
-//        // Note a corresponding change in the client index-socketio.html, as well
-//        // as necessary URL rewrite rule in web.config. 
-
-//        io.set('resource', '/socket.io');
-//    }
-//});
-
-
-
-
-
-
 module.exports = app;

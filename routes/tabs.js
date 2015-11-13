@@ -1,16 +1,12 @@
-﻿
-
-
 var util = require('util');
 var fs = require('fs');
 var path = require('path');
 var dal = require('../classes/dal');
 var api = require('../classes/api.js');
 var moment = require('moment');
-
+var verifier = require('../classes/verifier.js');
 var ObjectID = require("mongodb").ObjectID;
 var thumbler = require('../classes/thumbler.js');
-
 var express = require('express');
 var router = express.Router();
 
@@ -113,8 +109,29 @@ router.get('/fillmytab', function (req, res) {
                     tab.Comments = data;
                     db.collection("History").find({ $query: { "TabId": req.query._id }, $orderby: { Date : -1 } }).limit(10).toArray(function (err, data) {
                         tab.History = data;
+                        var hashArr = [];
+                        var tabDictionary = {};
+                        for (var i = 0; i < tab.History.length; i++) { 
+                            var hash = verifier.url2filename(tab.History[i].Url);
+                            hashArr.push(hash);
+                            tabDictionary[hash] = tab.History[i];
+                        }
+                       
+
+                        db.collection("Metadata").find({$query : { "hash": { $in: hashArr } } }, { title: 1, hash: 1, description: 1, Likes: { $elemMatch: { TabId: req.query._id } } }).toArray(function (err, metadata) {
+                            for (var i = 0; i < metadata.length; i++) {
+                                tabDictionary[metadata[i].hash].Likes = metadata[i].Likes;
+                            }
+                            tab.History = [];
+                            for (var hash in tabDictionary) {
+                                tab.History.push(tabDictionary[hash]);
+                            }
+
+                            res.json(tab);
                         
-                        res.json(tab);
+                        });
+       
+                        
                     });
                 });
             
