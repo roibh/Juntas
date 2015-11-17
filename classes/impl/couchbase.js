@@ -7,11 +7,7 @@
     
     var couchbase = require('couchbase');
     
-    //fs.readFile('./config/site.json', 'utf8', function (err, data) {
-    //    if (err) throw err;
-    //    obj = JSON.parse(data);
-    //});   
-    
+   
     var private_variable = 'value';
     function private_function() {
         return obj;
