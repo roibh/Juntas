@@ -22,7 +22,7 @@ var SocketUse = require('./classes/socket.js');
 var app = express();
 var http = require('http');
 
-var activeport = config.appSettings().port
+var activeport = config.appSettings().port;
 if (process.env.PORT !== undefined)
     activeport = process.env.PORT;
 var server = http.createServer(app).listen(activeport);
