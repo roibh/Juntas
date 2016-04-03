@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    
+    "module": "commonjs",
+    "moduleResolution": "classic",
+    "declaration": false,
+    "noImplicitAny": true,
+    "removeComments": true,
+    "sourceMap": true,
+    "newLine": "LF"
+  }
+   
+}

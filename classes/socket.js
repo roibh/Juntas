@@ -194,8 +194,10 @@ var socketuse = function(io) {
         });
 
         socket.on('page scroll', function(tabid, userid, details) {
+            console.log("page scroll: " + tabid);
             io.to(tabid).emit("page scroll", {
-                "tabid": tabid,
+                "TabId": tabid,
+                "UserId": userid,
                 "details": details
             });
 
