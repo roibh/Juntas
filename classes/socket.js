@@ -33,7 +33,7 @@ var socketuse = function(io) {
             }, function(items) {
                 for (var i = 0; i < items.length; i++) {
                     var tid = items[i]._id.toString();
-                   // if (socket.rooms.indexOf(tid) === -1)
+                    if (socket.rooms.indexOf(tid) === -1)
                         socket.join(tid);
 
                     if (global.Rooms[tid] === undefined) {
