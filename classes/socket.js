@@ -34,7 +34,7 @@ var socketuse = function(io) {
                 for (var i = 0; i < items.length; i++) {
                     var tid = items[i]._id.toString();
                     
-                    console.log(socket.rooms);
+                    console.log(socket.rooms["/#" + tid]);
                     
                     if (!socket.rooms["/#" + tid])
                         socket.join(tid);
