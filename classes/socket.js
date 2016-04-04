@@ -123,8 +123,14 @@ var socketuse = function(io) {
             console.log(data);
 
             var tabid = data._id.toString();
-            if (socket.rooms.indexOf(tabid) === -1)
+            console.log(socket.rooms["/#" + tabid]);
+                    
+            if (!socket.rooms["/#" + tabid])
                 socket.join(tabid);
+
+
+          //  if (socket.rooms.indexOf(tabid) === -1)
+          //      socket.join(tabid);
             //if (Rooms[tabid] === undefined) {
             dal.getSingle("Tabs", tabid, function(result) {
                 if (result !== null) {
@@ -178,8 +184,12 @@ var socketuse = function(io) {
                 global.Rooms[data._id] = data;
             socket.room = data._id;
 
-            if (socket.rooms.indexOf(data._id) === -1)
-                socket.join(data._id);
+ 
+            if (!socket.rooms["/#" + data._id])
+                        socket.join(data._id);
+
+          //  if (socket.rooms.indexOf(data._id) === -1)
+          //      socket.join(data._id);
 
 
 
