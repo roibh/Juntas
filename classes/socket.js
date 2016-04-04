@@ -36,7 +36,7 @@ var socketuse = function(io) {
                     
                     console.log(socket.rooms);
                     
-                    if (socket.rooms.indexOf(tid) === -1)
+                    if (!socket.rooms["/#" + tid])
                         socket.join(tid);
 
                     if (global.Rooms[tid] === undefined) {
