@@ -61,8 +61,8 @@ var thumbler = function () {
             
             
 
-            fs.createReadStream(path.resolve(global.appRoot, 'public/images/temp.png')).pipe(fs.createWriteStream(filepathfolder));
-            fs.createReadStream(path.resolve(global.appRoot, 'public/images/temp.png')).pipe(fs.createWriteStream(filepathfolder.replace('url_images', 'slide_images')));
+            fs.createReadStream(path.resolve(global.appRoot, 'public/images/temp.png')).pipe(fs.createWriteStream(filepathfolderdisc));
+            fs.createReadStream(path.resolve(global.appRoot, 'public/images/temp.png')).pipe(fs.createWriteStream(filepathfolderdisc.replace('url_images', 'slide_images')));
             
             var options = {
                 renderDelay: 5000,
@@ -79,7 +79,11 @@ var thumbler = function () {
             
             webshot(data.Url, filepathfoldertemp, options, function (err) {
                 
-                if (!fs.existsSync(filepathfolderdisctemp))
+                if(err !== null)
+                    return;
+                    
+                
+                if (!fs.existsSync(filepathfoldertemp))
                     return;
                 
                 

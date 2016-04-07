@@ -13,11 +13,28 @@ var ObjectID = require("mongodb").ObjectID;
 
 
 /* GET home page. */
-router.get('/*', function (req, res) {
+router.get('/rooms', function (req, res) {
     
     res.json(global.Rooms);
   
 
 });
+
+/* GET home page. */
+router.get('/room/', function (req, res) {
+    
+    
+    if( global.Rooms[req.query.tabid])
+    {
+    var room = global.Rooms[req.query.tabid].online;
+    return  res.json(room);
+      
+    }
+    
+    res.json({});
+    
+
+});
+
 
 module.exports = router;

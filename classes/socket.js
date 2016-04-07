@@ -22,10 +22,26 @@ var socketuse = function(io) {
 
     io.on('connection', function(socket) {
 
+        socket.on('disconnect', function(){
+            
+            var query = "SELECT * FROM Tabs WHERE Followers in @Followers";
+            dal.query(query, {
+                "Followers": [socket.userid]
+            }, function(items) {
+                for (var i = 0; i < items.length; i++) {
+                    var tid = items[i]._id.toString();
+                    if (global.Rooms[tid] !== undefined) {
+                      delete  global.Rooms[tid].online[socket.userid];
+                    }
+                }
+            });
+                    
+        });
+
 
         socket.on('juntas connect', function(data) {
 
-
+            socket.userid = data.UserId;
 
             var query = "SELECT * FROM Tabs WHERE Followers in @Followers";
             dal.query(query, {
@@ -34,14 +50,15 @@ var socketuse = function(io) {
                 for (var i = 0; i < items.length; i++) {
                     var tid = items[i]._id.toString();
                     
-                    console.log(socket.rooms["/#" + tid]);
+                   
                     
                     if (!socket.rooms["/#" + tid])
                         socket.join(tid);
 
-                    if (global.Rooms[tid] === undefined) {
-                        global.Rooms[tid] = items[i]
-                    }
+
+ 
+ 
+                   
                 }
             });
 
@@ -172,7 +189,22 @@ var socketuse = function(io) {
                     }
 
 
-                    global.Rooms[tabid] = result;
+                   
+                    
+                     if (global.Rooms[tabid] === undefined) {
+                          global.Rooms[tabid] = result;
+                        global.Rooms[tabid].online = {};
+                        global.Rooms[tabid].online[socket.userid] = true;
+                    }
+                    else
+                    {
+                        if(!global.Rooms[tabid].online)
+                                global.Rooms[tabid].online = {};
+                        
+                       global.Rooms[tabid].online[socket.userid] = true; 
+                        
+                    }
+                    
 
                 }
             })
@@ -215,7 +247,51 @@ var socketuse = function(io) {
             });
 
         });
+ 
 
+
+
+   
+
+
+        socket.on('webrtc send offer', function(tabid, userid, offer) {
+           
+            socket.broadcast.to(tabid).emit("webrtc create offer", {
+                "TabId": tabid,
+                "UserId": userid,
+                "offer": offer
+            });
+
+        });
+        
+             socket.on('webrtc send answer', function(tabid, userid, offer) {
+           
+            socket.broadcast.to(tabid).emit("webrtc offer accepted", {
+                "TabId": tabid,
+                "UserId": userid,
+                "offer": offer
+            });
+
+        });
+        
+               socket.on('webrtc ice candidate', function(tabid, userid, ice) {
+           
+                socket.broadcast.to(tabid).emit("webrtc ice candidate", {
+                    "TabId": tabid,
+                    "UserId": userid,
+                    "ice": ice
+                });
+
+        });
+        
+        
+        
+        
+        
+        
+        
+        
+        
         socket.on('post message', function(tabid, userid, message) {
             var pushObject = {
                 "Date": new Date(),
