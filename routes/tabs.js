@@ -284,7 +284,9 @@ router.post('/search', function (req, res) {
     dal.connect(function (err, db) {
         
         
-        db.collection("Users").find({ $or: [{ "Name": { '$regex': name } }, { "Email": { '$regex': name } }] }).toArray(function (err, arr) {
+        var term = new RegExp(".*" + name + ".*", 'i');
+        
+        db.collection("Users").find({ $or: [{ "Name": { '$regex': term } }, { "Email": { '$regex': term } }] }).toArray(function (err, arr) {
             
             
             var x = arr;
@@ -295,8 +297,8 @@ router.post('/search', function (req, res) {
             
             db.collection("Tabs").find({
                 $or: [
-                    { "Name": { '$regex': name } },
-                    { "Description": { '$regex': name } },
+                    { "Name": { '$regex': term } },
+                    { "Description": { '$regex': term } },
                 ], 
                 $and : [{ "Configuration.Discovery": { "$eq": "public" } }]
             }).toArray(function (err, arr) {
