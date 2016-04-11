@@ -1,7 +1,7 @@
 {
   "name": "juntas - online together",
-  "apiUrl": "https://juntas-roibh1.c9.io",
-  "apiUrlOnline": "juntasonline.herokuapps.com"
+  "apiUrlDev": "https://juntas-roibh1.c9.io",
+  "apiUrl": "https://juntasonline.herokuapps.com"
      
 
 }
