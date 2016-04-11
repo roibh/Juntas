@@ -13,10 +13,21 @@ router.get('/share', function(req, res) {
     var tabid = req.query.j;
     var userid = req.query.u;
 
+
+ var query = "SELECT * FROM Users WHERE _id=@_id";
+    dal.query(query, { "_id": ObjectID(userid)}, function(userdata){
+        
+        
+        if(userdata.length >0)
+            userdata = userdata[0];
+    
+        
     var query = "SELECT * FROM Tabs WHERE _id=@_id";
-    dal.query(query, {
+    dal.query(query, 
+    {
         "_id": ObjectID(tabid)
-    }, function(data) {
+    }, function(data) 
+    {
         if (data.length == 0)
             res.status(404).end();
         else {
@@ -40,7 +51,7 @@ router.get('/share', function(req, res) {
                    // text = text.replace("embedUrl", result.Url);
                    // text = text.replace("juntasTabId", tabid);
                     
-                    var modelData = {"embedUrl": result.Url, "juntasTabId": tabid};
+                    var modelData = {"embedUrl": result.Url, "juntasTabId": tabid, "tab": obj, "user": userdata};
                     res.render('redirect',modelData );
                    // res.send(text);
 
@@ -49,16 +60,24 @@ router.get('/share', function(req, res) {
 
             });
 
-
+  
 
 
 
 
         }
-    });
+        
+   
 
 
 });
+
+
+
+});
+
+});
+
 
 router.get('/start', function(req, res) {
 

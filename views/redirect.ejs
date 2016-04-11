@@ -19,6 +19,121 @@
     <script type="text/javascript" src="../js/angular/angular-resource.js"></script>
 
 
+
+<style type="text/css">
+    .container {
+  height: 100vh;
+  width: 100vw;
+  font-family: Helvetica;
+}
+
+.jumbotron {
+    
+    padding: 15px!important;
+}
+.semi-container
+{
+    position: absolute;
+    margin: auto;
+width: 75vh;
+top: 50px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.loader {
+  height: 20px;
+  width: 250px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+.loader--dot {
+  animation-name: loader;
+  animation-timing-function: ease-in-out;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  height: 20px;
+  width: 20px;
+  border-radius: 100%;
+  background-color: black;
+  position: absolute;
+  border: 2px solid white;
+}
+.loader--dot:first-child {
+  background-color: #8cc759;
+  animation-delay: 0.5s;
+}
+.loader--dot:nth-child(2) {
+  background-color: #8c6daf;
+  animation-delay: 0.4s;
+}
+.loader--dot:nth-child(3) {
+  background-color: #ef5d74;
+  animation-delay: 0.3s;
+}
+.loader--dot:nth-child(4) {
+  background-color: #f9a74b;
+  animation-delay: 0.2s;
+}
+.loader--dot:nth-child(5) {
+  background-color: #60beeb;
+  animation-delay: 0.1s;
+}
+.loader--dot:nth-child(6) {
+  background-color: #fbef5a;
+  animation-delay: 0s;
+}
+.loader--text {
+  position: absolute;
+  top: 200%;
+  left: 0;
+  right: 0;
+  width: 4rem;
+  margin: auto;
+}
+.loader--text:after {
+  content: "Loading";
+  font-weight: bold;
+  animation-name: loading-text;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes loader {
+  15% {
+    transform: translateX(0);
+  }
+  45% {
+    transform: translateX(230px);
+  }
+  65% {
+    transform: translateX(230px);
+  }
+  95% {
+    transform: translateX(0);
+  }
+}
+@keyframes loading-text {
+  0% {
+    content: "Loading";
+  }
+  25% {
+    content: "Loading.";
+  }
+  50% {
+    content: "Loading..";
+  }
+  75% {
+    content: "Loading...";
+  }
+}
+
+</style>
+
     <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -35,20 +150,71 @@
 
     <div class="container">
 
+
+ 
+ 
         
-        <div class="jumbotron" ng-show="ExtensionInstalled && CheckComplete ">
+      
+  <div class='loader' ng-show="!CheckComplete">
+    <div class='loader--dot'></div>
+    <div class='loader--dot'></div>
+    <div class='loader--dot'></div>
+    <div class='loader--dot'></div>
+    <div class='loader--dot'></div>
+    <div class='loader--dot'></div>
+    <div class='loader--text'></div>
+  </div>
+  
+  
+  
+  
+  
+  <div class="semi-container" ng-show="!ExtensionInstalled && CheckComplete ">  <div class="panel">
+      <div class="panel-heading"></div>
+      <div class="panel-body">
+           
+       
+        <div class="jumbotron" ng-show="!ExtensionInstalled && CheckComplete ">
             <h1>You've been Juntified!</h1>
+            <attr>by</attr>
+            <h5><img  src="<%=user.Picture.data.url%>" class="img-thumbnail" /> <%=user.FirstName + " " + user.LastName%> invites you to join <span class="badge"> <%=tab.Name%></span></h5>
+            <h6>Juntas extension is not installed in your browser.</h6>
+            <p><a class="btn btn-primary" ng-click="Install();" id="install-button" href="#" role="button"> <img src="/favicon.png" />   Add to Chrome</a></p>
+        </div>
+         </div>
+      </div>
+  </div></div>
+  
+  
+  
+  
+  
+  
+  
+  <div class="semi-container" ng-show="ExtensionInstalled && CheckComplete ">  <div class="panel">
+      <div class="panel-heading"></div>
+      <div class="panel-body">
+           <div class="jumbotron">
+           <h1>You've been Juntified!</h1>
+            <attr>by</attr>
+            <h5><img  src="<%=user.Picture.data.url%>" class="img-thumbnail" /> <%=user.FirstName + " " + user.LastName%> invites you to join <span class="badge"> <%=tab.Name%></span></h5>
+ 
           
             
             <p><a href="<%=embedUrl%>" id="embedClick" role="button" class="btn btn-primary btn-lg">Go there</a>
             </p>
         </div>
 
-        <div class="jumbotron" ng-show="!ExtensionInstalled && CheckComplete ">
-            <h1>You've been Juntified!</h1>
-            <h1>Juntas extension is not installed in your browser. click the button beloow to install it.</h1>
-            <p><a class="btn btn-primary btn-lg" ng-click="Install();" id="install-button" href="#" role="button">Add to Chrome</a></p>
-        </div>
+        
+        
+      </div>
+  </div></div>
+  
+  
+
+  
+        
+       
 
     </div>
     

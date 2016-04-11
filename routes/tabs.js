@@ -90,6 +90,7 @@ router.get('/fillmytab', function (req, res) {
     if (!req.query) return res.sendStatus(400);
     
     var query = "SELECT * FROM Tabs WHERE _id=@_id";
+    var tabid = req.query._id;
     dal.getSingle("Tabs", req.query._id , function (tab) {
         var finalObject = {};
         dal.getSet(tab.Followers, "Users", function (data) {
@@ -99,6 +100,10 @@ router.get('/fillmytab', function (req, res) {
                 delete data[i].Password;
                 
                 tab.Followers[data[i]._id] = data[i];
+                if(global.Rooms[tabid] && global.Rooms[tabid].online)
+                        tab.Followers[data[i]._id].online = global.Rooms[tabid].online[data[i]._id];
+                 
+                
                    
             }
             

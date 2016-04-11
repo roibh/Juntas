@@ -363,7 +363,8 @@ var socketuse = function(io) {
                         if (err === null) {
                             io.to(tabid).emit("like url", {
                                 "TabId": tabid,
-                                "Map": pushObject
+                                "Map": pushObject,
+                                "hash": hash
                             });
                         }
                     });

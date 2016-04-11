@@ -20,7 +20,7 @@
             $interval.cancel(checkInterval);
             $Config.ready(function () {
                  
-                var res = $resource($Config.site.apiUrl + "tabs/Tabs");
+                var res = $resource($Config.site.apiUrl + "/tabs/Tabs");
                 res.get({ _id: tabId }, function (data) {
                     
                     var g = {
