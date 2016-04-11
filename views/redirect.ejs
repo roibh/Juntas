@@ -167,7 +167,7 @@ top: 50px;
   
   
   
-  
+  <%=JSON.stringify(user)%>
   
   <div class="semi-container" ng-show="!ExtensionInstalled && CheckComplete ">  <div class="panel">
       <div class="panel-heading"></div>
@@ -177,7 +177,7 @@ top: 50px;
         <div class="jumbotron" ng-show="!ExtensionInstalled && CheckComplete ">
             <h1>You've been Juntified!</h1>
             <attr>by</attr>
-            <h5><img  src="<%=user.Picture.data.url%>" class="img-thumbnail" /> <%=user.FirstName + " " + user.LastName%> invites you to join <span class="badge"> <%=tab.Name%></span></h5>
+            <h5><img  src="<%=(user.Picture!== undefined ) ? user.Picture.data.url: ''%>" class="img-thumbnail" /> <%=user.FirstName + " " + user.LastName%> invites you to join <span class="badge"> <%=tab.Name%></span></h5>
             <h6>Juntas extension is not installed in your browser.</h6>
             <p><a class="btn btn-primary" ng-click="Install();" id="install-button" href="#" role="button"> <img src="/favicon.png" />   Add to Chrome</a></p>
         </div>
@@ -197,7 +197,7 @@ top: 50px;
            <div class="jumbotron">
            <h1>You've been Juntified!</h1>
             <attr>by</attr>
-            <h5><img  src="<%=user.Picture.data.url%>" class="img-thumbnail" /> <%=user.FirstName + " " + user.LastName%> invites you to join <span class="badge"> <%=tab.Name%></span></h5>
+            <h5><img  src="<%=(user.Picture!== undefined )  ? user.Picture.data.url: ''%>" class="img-thumbnail" /> <%=user.FirstName + " " + user.LastName%> invites you to join <span class="badge"> <%=tab.Name%></span></h5>
  
           
             

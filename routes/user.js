@@ -89,7 +89,7 @@ router.post("/facebook", function (req, res) {
                 "Token": req.body.Token,
                 "Uid" : req.body.Uid
             }
-            var query = "INSERT INTO Users;";
+            var query = "INSERT INTO Users";
             dal.query(query, user, function (user) {
                 res.json(user.ops[0]);
             });
