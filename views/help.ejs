@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" data-ng-app="JuntasApp">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="chrome-webstore-item"
+          href="https://chrome.google.com/webstore/detail/behimaeapdpdfokmhjahapambjidjdap">
+
+
+    <link href="../css/themes/paper/bootstrap.min.css" rel="stylesheet" id="mainthemefile" />
+    <link rel="stylesheet" href="" id="rtlfile">
+    <link href="../css/bootstrap-social.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+    <script type="text/javascript" src="../js/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="../js/angular/angular.js"></script>
+    <script type="text/javascript" src="../js/angular/angular-resource.js"></script>
+
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-67832796-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+</head>
+<body data-ng-controller="Starter">
+
+
+    <div class="container">
+        <div class="jumbotron" ng-show="ExtensionInstalled && CheckComplete ">
+            <h1>The juntas begins!</h1>
+            <form id="searchbox_014090630614401310419:bwbunjtolb4" action="https://www.google.com">
+                <p>
+                    <input value="014090630614401310419:bwbunjtolb4" name="cx" type="hidden" />
+                    <input value="FORID:11" name="cof" type="hidden" />
+                    <input id="q" name="q" type="text" class="form-control" />
+                    <input value="Search" name="sa" type="submit" class="btn btn-primary btn-lg" />
+                </p>
+            </form>
+        </div>
+        <div class="jumbotron" ng-show="!ExtensionInstalled && CheckComplete ">
+            <h1>You've been Juntified!</h1>
+            <h1>Juntas extension is not installed in your browser. click the button beloow to install it.</h1>
+            <p><a class="btn btn-primary btn-lg" ng-click="Install();" id="install-button" href="#" role="button">Add to Chrome</a></p>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var tabId = "<%=juntasTabId%>";
+    </script>
+    <script type="text/javascript" src="../js/start.js"></script>
+    <script type="text/javascript" src="../js/config.js"></script>
+</body>
+</html>
