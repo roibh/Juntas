@@ -8,6 +8,7 @@
 
 
     <link href="../css/themes/paper/bootstrap.min.css" rel="stylesheet" id="mainthemefile" />
+    <link href="../css/juntas.css" rel="stylesheet" />
     <link rel="stylesheet" href="" id="rtlfile">
     <link href="../css/bootstrap-social.css" rel="stylesheet" />
     <link rel="stylesheet" href="../css/font-awesome.min.css">
@@ -41,7 +42,8 @@
         
         
   
-  <div class="semi-container" ng-show="!ExtensionInstalled && CheckComplete ">  <div class="panel">
+  <div class="semi-container" ng-show="!ExtensionInstalled && CheckComplete ">  
+  <div class="panel">
       <div class="panel-heading"></div>
       <div class="panel-body">
            
@@ -49,29 +51,40 @@
         <div class="jumbotron" ng-show="!ExtensionInstalled && CheckComplete ">
             <h1>You've been Juntified!</h1>
             <attr>by</attr>
-            <h5><img  src="<%=(user.Picture!== undefined ) ? user.Picture.data.url: ''%>" class="img-thumbnail" /> <%=user.FirstName + " " + user.LastName%> invites you to join <span class="badge"> <%=tab.Name%></span></h5>
             <h6>Juntas extension is not installed in your browser.</h6>
             <p><a class="btn btn-primary" ng-click="Install();" id="install-button" href="#" role="button"> <img src="/favicon.png" />   Add to Chrome</a></p>
         </div>
          </div>
       </div>
   </div>
-        
-        
-        
-        
-        
-        <div class="jumbotron" ng-show="ExtensionInstalled && CheckComplete ">
+  
+  
+  
+        <div class="semi-container" ng-show="ExtensionInstalled && CheckComplete ">
+            <div class="panel">
+      <div class="panel-heading"></div>
+      <div class="panel-body">
+          
+          
             <h1>The juntas begins!</h1>
             <form id="searchbox_014090630614401310419:bwbunjtolb4" action="https://www.google.com">
                 <p>
                     <input value="014090630614401310419:bwbunjtolb4" name="cx" type="hidden" />
                     <input value="FORID:11" name="cof" type="hidden" />
-                    <input id="q" name="q" type="text" class="form-control" />
+                    <div class="input-group">
+                    <input id="q" name="q" type="text" class="form-control input-lg" />
+                       <span class="input-group-btn">
                     <input value="Search" name="sa" type="submit" class="btn btn-primary btn-lg" />
+                    </span>
+                    </div>
                 </p>
             </form>
+              </div>
+      </div>
         </div>
+        
+        
+        
         <div class="jumbotron" ng-show="!ExtensionInstalled && CheckComplete ">
             <h1>You've been Juntified!</h1>
             <h1>Juntas extension is not installed in your browser. click the button beloow to install it.</h1>

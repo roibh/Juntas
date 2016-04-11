@@ -1,4 +1,14 @@
 /// <reference path="node/node.d.ts" />
+
+// add this to the VERY top of the first file loaded in your app
+var opbeat = require('opbeat').start({
+  appId: 'ee9611ec98',
+  organizationId: '25b4422919b94bccb4393618efed18d4',
+  secretToken: 'a3b776cfceb1dcddea52af25bd9a7de64e847e9e'
+})
+
+
+
 global.appRoot = __dirname;
 global.api_token = "DA113CED-66D3-4BFD-9EE2-873848CE000A";
  
