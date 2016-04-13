@@ -30,7 +30,7 @@ var socketuse = function(io) {
             }, function(items) {
                 for (var i = 0; i < items.length; i++) {
                     var tid = items[i]._id.toString();
-                    if (global.Rooms[tid] !== undefined) {
+                    if (global.Rooms[tid] !== undefined && global.Rooms[tid].online && global.Rooms[tid].online[socket.userid]) {
                       delete  global.Rooms[tid].online[socket.userid];
                     }
                 }
@@ -84,6 +84,25 @@ var socketuse = function(io) {
 
         socket.on('tab navigate', function(data) {
             var tabid = data.TabId;
+            
+            
+             if (global.Rooms[tabid] === undefined) 
+                    {
+                        global.Rooms[tabid] = {};
+                        global.Rooms[tabid].online = {};
+                        global.Rooms[tabid].online[data.userid] = true;
+                    }
+                    else
+                    {
+                        if(!global.Rooms[tabid].online)
+                                global.Rooms[tabid].online = {};
+                        
+                       global.Rooms[tabid].online[data.userid] = true; 
+                        
+                    }
+                    
+                    
+            
             if (global.Rooms[tabid] !== undefined) {
 
                 verifier.verify(data, function(metadata) {
@@ -91,6 +110,10 @@ var socketuse = function(io) {
                     var filepathbase = moment().format("MM_YYYY") + "/" + actionGuid + ".png";
                     if (metadata["og:image"] !== undefined) {
                         filepathbase = metadata["og:image"];
+                    }
+                    else if(data.Url.indexOf('.png') > 0 || data.Url.indexOf('.jpg') > 0  ){
+                        filepathbase = data.Url;
+                        
                     }
                     else {
                         thumbler.capture(data, actionGuid, function() {

@@ -25,7 +25,9 @@ var thumbler = function () {
         var filepathfolderdisc = global.appRoot + "\\public\\url_images\\" + dateKey + "\\" + actionGuid + ".png";
         var filepathfoldertemp = "public/url_images/" + dateKey + "/temp" + actionGuid + ".png";
         var filepathfolderdisctemp = global.appRoot + "\\public\\url_images\\" + dateKey + "\\temp" + actionGuid + ".png";
-        
+         finishcallback();
+         
+         
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir);
         }

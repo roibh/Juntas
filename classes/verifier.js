@@ -30,6 +30,12 @@ var verifier = function () {
             
                 if (metadata === null) {
 
+
+
+
+
+
+                   
                     // use a timeout value of 10 seconds
                     var timeoutInMilliseconds = 10 * 1000
                     var opts = {
@@ -37,6 +43,9 @@ var verifier = function () {
                         url: url,
                         timeout: timeoutInMilliseconds
                     }
+                    
+                    
+                    
                     
                     request(opts, function (err, res, body) {
                         if (err) {
