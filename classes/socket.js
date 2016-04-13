@@ -137,15 +137,15 @@ var socketuse = function(io) {
         });
 
         socket.on('tab connect', function(data, userid) {
-            console.log(data);
+             
 
             var tabid = data._id.toString();
-            console.log(socket.rooms["/#" + tabid]);
+          
                     
-            if (!socket.rooms["/#" + tabid])
+            if (!socket.rooms.indexOf(tabid) ===-1)
                 socket.join(tabid);
 
-
+            console.log("connecting to room:" + tabid);
           //  if (socket.rooms.indexOf(tabid) === -1)
           //      socket.join(tabid);
             //if (Rooms[tabid] === undefined) {
@@ -239,7 +239,7 @@ var socketuse = function(io) {
         });
 
         socket.on('page scroll', function(tabid, userid, details) {
-            console.log("page scroll: " + tabid);
+             
             io.to(tabid).emit("page scroll", {
                 "TabId": tabid,
                 "UserId": userid,

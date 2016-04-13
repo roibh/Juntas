@@ -53,7 +53,7 @@
         if(process.env.PORT !== undefined)
             activeport = process.env.PORT;
         app.listen(activeport, function () {
-            console.log("DMA mobile api is up and running on port " + activeport);
+            
             //config.appSettings().port
            
         });

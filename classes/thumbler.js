@@ -87,41 +87,71 @@ var thumbler = function () {
                     return;
                 
                 
-                var resizeCrop = require('resize-crop');
                 
-                resizeCrop(
-                    {
-                        format: 'jpg',
-                        src: filepathfoldertemp,
-                        dest: filepathfolder.replace('url_images', 'slide_images'),
-                        height: 180,
-                        width: 260,
-                        gravity: "center"
-                    }, 
-    function (err, filePath) {
+                var Jimp = require("jimp");
+                // open a file called "lenna.png" 
+                Jimp.read(filepathfoldertemp, function (err, slideimage) {
+                    if (err) throw err;
+                    slideimage.resize(260, 182)            // resize 
+                         .quality(60)                 // set JPEG quality 
+                         //.greyscale()                 // set greyscale 
+                         .write(filepathfolder.replace('url_images', 'slide_images')); // save 
+                         
+                         
+                        Jimp.read(filepathfoldertemp, function (err, slideimage) {
+                        if (err) throw err;
+                        slideimage.resize(100, 80)            // resize 
+                        .quality(60)                 // set JPEG quality 
+                        //.greyscale()                 // set greyscale 
+                        .write(filepathfolder); // save 
                         
-                        resizeCrop(
-                            {
-                                format: 'jpg',
-                                src: filepathfoldertemp,
-                                dest: filepathfolder,
-                                height: 80,
-                                width: 100,
-                                gravity: "center"
-                            }, 
-    function (err, filePath) {
-                                // do something 
-                                fs.unlinkSync(filepathfoldertemp);
+                           fs.unlinkSync(filepathfoldertemp);
                                 finishcallback();
+                        
+                        });
+                
+                
+                });
+                
+                
+               
+                
+                
+    //             var resizeCrop = require('resize-crop');
+                
+    //             resizeCrop(
+    //                 {
+    //                     format: 'jpg',
+    //                     src: filepathfoldertemp,
+    //                     dest: filepathfolder.replace('url_images', 'slide_images'),
+    //                     height: 180,
+    //                     width: 260,
+    //                     gravity: "center"
+    //                 }, 
+    // function (err, filePath) {
+                        
+    //                     resizeCrop(
+    //                         {
+    //                             format: 'jpg',
+    //                             src: filepathfoldertemp,
+    //                             dest: filepathfolder,
+    //                             height: 80,
+    //                             width: 100,
+    //                             gravity: "center"
+    //                         }, 
+    // function (err, filePath) {
+    //                             // do something 
+    //                             fs.unlinkSync(filepathfoldertemp);
+    //                             finishcallback();
 
-                            }
-                        );
+    //                         }
+    //                     );
                         
 
-                        // do something 
-                        //fs.unlinkSync(filepathfoldertemp);
-                    }
-                );
+    //                     // do something 
+    //                     //fs.unlinkSync(filepathfoldertemp);
+    //                 }
+    //             );
 
             
  
