@@ -60,9 +60,18 @@ var thumbler = function () {
             
             
             
-
+        try{
             fs.createReadStream(path.resolve(global.appRoot, 'public/images/temp.png')).pipe(fs.createWriteStream(filepathfolderdisc));
+        }catch(e){
+            
+            console.log("error creating file");
+        }
+        try{
             fs.createReadStream(path.resolve(global.appRoot, 'public/images/temp.png')).pipe(fs.createWriteStream(filepathfolderdisc.replace('url_images', 'slide_images')));
+        }catch(e)
+        {
+            console.log("error creating file");
+        }
             
             var options = {
                 renderDelay: 5000,
