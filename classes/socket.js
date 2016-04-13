@@ -115,14 +115,25 @@ var socketuse = function(io) {
                         filepathbase = data.Url;
                         
                     }
-                    else {
+                    else
+                    {
+                        filepathbase = "noimage.png";    
+                    
+                    }
+                  /*  else {
                         thumbler.capture(data, actionGuid, function() {
                             io.to(tabid).emit("image captured", {
                                 "TabId": tabid,
                                 "FileName": filepathbase
                             });
                         });
-                    }
+                    }*/
+                    
+                     io.to(tabid).emit("image captured", {
+                                "TabId": tabid,
+                                "FileName": filepathbase
+                            });
+                    
                     if (metadata["title"] !== undefined) {
                         data.Title = metadata["title"];
                     }
