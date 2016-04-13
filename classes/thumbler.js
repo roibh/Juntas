@@ -86,7 +86,11 @@ var thumbler = function () {
                 if (!fs.existsSync(filepathfoldertemp))
                     return;
                 
-                
+                fs.unlinkSync(filepathfoldertemp);
+                                finishcallback();
+                                
+                                return;
+                                
                 
                 var Jimp = require("jimp");
                 // open a file called "lenna.png" 
