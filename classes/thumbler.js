@@ -90,16 +90,22 @@ var thumbler = function () {
                 
                 var Jimp = require("jimp");
                 // open a file called "lenna.png" 
+                console.log(filepathfoldertemp);
                 Jimp.read(filepathfoldertemp, function (err, slideimage) {
+                    console.log(err);
                     if (err) throw err;
+                    
                     slideimage.resize(260, 182)            // resize 
                          .quality(60)                 // set JPEG quality 
                          //.greyscale()                 // set greyscale 
                          .write(filepathfolder.replace('url_images', 'slide_images')); // save 
-                         
+                          console.log(filepathfolder.replace('url_images', 'slide_images'));
                          
                         Jimp.read(filepathfoldertemp, function (err, slideimage) {
+                            console.log(err);
+                            
                         if (err) throw err;
+                        
                         slideimage.resize(100, 80)            // resize 
                         .quality(60)                 // set JPEG quality 
                         //.greyscale()                 // set greyscale 
