@@ -142,7 +142,7 @@ var socketuse = function(io) {
             var tabid = data._id.toString();
           
                     
-            if (!socket.rooms.indexOf(tabid) ===-1)
+            if (socket.rooms.indexOf && !socket.rooms.indexOf(tabid) ===-1)
                 socket.join(tabid);
 
             console.log("connecting to room:" + tabid);
