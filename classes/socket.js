@@ -81,7 +81,19 @@ var socketuse = function(io) {
                 });
             }
         });
-
+        
+      socket.on('user is typing', function(tabid, userid) {
+          
+             io.to(tabid).emit("user is typing", {
+                                "TabId": tabid,
+                                "UserId": userid
+                            });
+           
+      });
+  
+  
+  
+  
         socket.on('tab navigate', function(data) {
             var tabid = data.TabId;
             
