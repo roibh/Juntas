@@ -77,7 +77,19 @@ router.get('/share', function(req, res) {
 });
 
 });
+router.get('/entry', function(req, res) {
 
+   
+                  
+
+    var modelData = {};
+    res.render('entry',modelData );
+                   
+
+ 
+
+
+});
 
 router.get('/start', function(req, res) {
 

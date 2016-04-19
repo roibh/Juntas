@@ -1,3 +1,5 @@
+/// <reference path="node/node.d.ts" />
+// add this to the VERY top of the first file loaded in your app
 var opbeat = require('opbeat').start({
     appId: 'ee9611ec98',
     organizationId: '25b4422919b94bccb4393618efed18d4',
@@ -40,7 +42,7 @@ app.use(bodyParser.json({
         }
         return value;
     },
-    limit: '50mb',
+    limit: '50mb'
 }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors());
@@ -54,4 +56,3 @@ console.log("init complete");
 console.log("juntas is online at cloud9");
 global.Rooms = {};
 module.exports = app;
-//# sourceMappingURL=app.js.map

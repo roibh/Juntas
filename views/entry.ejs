@@ -1,0 +1,497 @@
+<!doctype html>
+<html data-ng-app="JuntasApp" data-ng-csp>
+<head>
+    <title></title>
+    <link href="css/popup.css" rel="stylesheet" />
+    <!--   <link href="css/m-styles.min.css" rel="stylesheet" />-->
+    <link href="../css/themes/paper/bootstrap.min.css" rel="stylesheet" id="mainthemefile" />
+    <link rel="stylesheet" href="" id="rtlfile">
+    <link href="../css/bootstrap-social.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link href="../css/bootstrap-switch.css" rel="stylesheet" />
+    <script src="../js/moment.js"></script>
+    <script src="config/config.js"></script>
+    <script src="../js/oauth2/oauth2.js"></script>
+    <script type="text/javascript" src="../js/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="../js/angular/angular.js"></script>
+    <script type="text/javascript" src="../js/angular/angular-resource.js"></script>
+    <script type="text/javascript" src="../js/angular/angular-aria.min.js"></script>
+    <script type="text/javascript" src="../js/angular/angular-animate.js"></script>
+    <script type="text/javascript" src="../js/angular/angular-translate.js"></script>
+    <script type="text/javascript" src="../js/angular/angular-translate-loader-static-files.js"></script>
+    <script type="text/javascript" src="../js/angular/angular-sanitize.js"></script>
+    <script type="text/javascript" src="js/ui-bootstrap-tpls-0.14.3.min.js"></script>
+    <!--<script type="text/javascript" src="../js/angular-material.min.js"></script>-->
+    <script type="text/javascript" src="../js/dialogs.js"></script>
+    <script type="text/javascript" src="../js/bootstrap-switch.js"></script>
+    <!--<script type="text/javascript" src="js/progress-bar.js"></script>-->
+    <script type="text/javascript" src="js/popup.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div data-ng-controller="JuntasCtrl" id="JuntasCtrl" ng-init="init()" class="container">
+        <nav class="navbar-fixed-top" role="navigation">
+            <div class="navbar-default navbar-inverse topbar">
+                <div class="container-fluid">
+                    <div class="navbar-header fleft">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <sup>v{{Version}}</sup>
+                        <a class="navbar-brand">
+                            {{"juntas" | translate}}<span class="badge">
+                                <img src="../icons/icon48.png" class="brandlogo" />
+                            </span>  <small>{{"online together" | translate}}</small>
+                        </a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav pull-right">
+                            <li ng-if="!notLogedIn">
+                                <img ng-src="{{User.Picture.data.url}}" class="pull-left popup-avatar" />
+                                <a class="pull-left">
+                                    {{User.FirstName}} {{User.LastName}} <br />
+                                    <span ng-click="Logout()" class="btn btn-default btn-xs"><i class="fa fa-sign-out"></i>  {{"Sign out" | translate}}</span>
+                                </a>
+                            </li>
+                            <!--<li ng-if="!notLogedIn">
+                                                            <a>
+                                                                <div>
+                                                                    {{"connected as" | translate}}:<br />
+                                                                              </div>
+                                                            </a>
+                                                        </li>-->
+                            <li class="pull-right" ng-if="!notLogedIn">
+                                <a href="#" class="fa fa-cog settings-icon" data-toggle="modal" data-target="#myModal">{{page}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <juntas-progress-linear md-mode="indeterminate" ng-show="true"></juntas-progress-linear>
+        <div ng-if="notLogedIn" class="container-fluid">
+            <div ng-show="socialLogin">
+                <a class="btn btn-block btn-social btn-facebook" ng-click="initFacebook()">
+                    <i class="fa fa-facebook"></i>{{"Sign in with Facebook" | translate}}
+                </a>
+                <a class="btn btn-block btn-social btn-google" data-ng-click="googleLogin()">
+                    <i class="fa fa-google-plus"></i>{{"Sign in with Google" | translate}}
+                </a>
+            </div>
+
+            <div class="row" ng-hide="socialLogin">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <div class="panel panel-success panelheight" ng-hide="RemindPassword">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <span class="glyphicon glyphicon-user"></span> {{"Sign in"| translate}}
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <form class="form">
+                                <div class="form-group">
+                                    <label for="Email">{{"Email" | translate}}:</label>
+                                    <input type="email" class="form-control" id="Email" data-ng-model="LoginInformation.Email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="Password">{{"Password" | translate}}:</label>
+                                    <input type="password" class="form-control" id="Password" data-ng-model="LoginInformation.Password">
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <a ng-click="RemindPassword = true">
+                                            {{"Forgot password?" | translate}}
+                                        </a>
+                                    </label>
+                                </div>
+                                <a class="btn btn-primary " id="signinBtn" ng-click="Login()">{{"Sign in" | translate}}</a>
+                                <div class="panel pull-right bg-danger errorpanel" ng-show="LoginInformation.Error !== undefined">
+                                    <div class="panel-body bg-danger">
+                                        {{LoginInformation.Error | translate}}
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="panel panel-success panelheight" ng-show="RemindPassword">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <span class="glyphicon glyphicon-user"></span> {{"Password reminder"| translate}}
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <form class="form" name="passwordFrm">
+                                <div class="form-group">
+                                    {{passwordFrm.Email.$invalid}}
+                                    <label for="Email">{{"Email" | translate}}:</label>
+                                    <input type="email" class="form-control" name="Email" data-ng-model="RemindPasswordInformation.Email">
+                                    <span ng-show="passwordFrm.Email.$touched && passwordFrm.Email.$invalid">Email is required.</span>
+
+                                </div>
+                            </form>
+                            <a class="btn btn-primary " id="signinBtn" ng-click="ResetPassword()">{{"Reset password" | translate}}</a>
+                            <div class="panel pull-right bg-danger errorpanel" ng-show="RemindPasswordInformation.Error !== undefined">
+                                <div class="panel-body bg-danger">
+                                    {{RemindPasswordInformation.Error | translate}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                    <div class="panel panel-info panelheight">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <span class="glyphicon glyphicon-pencil"></span> {{"Sign up" | translate}}
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <form class="form" id="RegisterPanel">
+                                <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                    <label for="FirstName">{{"First name" | translate}}:</label>
+                                    <input type="text" class="form-control" id="FirstName" data-ng-model="RegistrationInformation.FirstName">
+                                </div>
+                                <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                    <label for="LastName">{{"Last name" | translate}}:</label>
+                                    <input type="text" class="form-control" id="LastName" data-ng-model="RegistrationInformation.LastName">
+                                </div>
+                                <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label for="Email">{{"Email" | translate}}:</label>
+                                    <input type="email" class="form-control" id="Email" data-ng-model="RegistrationInformation.Email">
+                                </div>
+                                <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                    <label for="Password">{{"Password" | translate}}:</label>
+                                    <input type="password" class="form-control" id="Password" data-ng-model="RegistrationInformation.Password">
+                                </div>
+                                <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                    <label for="PasswordMatch">{{"Repeat Password" | translate}}:</label>
+                                    <input type="password" class="form-control" id="RepeatPassword" data-ng-model="RegistrationInformation.RepeatPassword">
+                                </div>
+                                <a class="btn btn-primary" ng-click="Register()">{{"Sign up" | translate}}</a>
+                                <div class="panel pull-right bg-danger errorpanel" ng-show="RegistrationInformation.Error !== undefined">
+                                    <div class="panel-body bg-danger">
+                                        {{RegistrationInformation.Error | translate}}
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <a data-ng-show="socialLogin" data-ng-click="socialLogin = false;">{{"i want to use email and password for registration or login"| translate}}</a>
+            <a data-ng-show="!socialLogin" data-ng-click="socialLogin = true;">{{"Facebook or Google login"| translate}}</a>
+        </div>
+
+
+
+
+        <div ng-if="!notLogedIn">
+            <div class="page-header">
+                <h3 class="hide-fade" ng-hide="UImode !== ''">
+                    {{"juntas_slogen" | translate}}
+                </h3>
+                <a class="btn btn-primary" ng-class="{'active': UImode == 'Create'}" ng-click="UImode = 'Create'">{{"Create" | translate}}</a>
+                <a class="btn btn-primary" ng-class="{'active': UImode == 'Join'}" ng-click="UImode = 'Join'">{{"Join" | translate}}</a>
+                <a class="btn btn-primary" ng-class="{'active': UImode == 'Manage'}" ng-click="UImode = 'Manage'">{{"My groups" | translate}}</a>
+            </div>
+            <div class="panel panel-primary" ng-if="UImode == 'Create'">
+                <div class="panel-heading padding10">
+                    {{"Create" | translate}}
+                </div>
+                <div class="panel-body padding10">
+                    <form class="form" name="CoBrowseForm">
+                        <div class="row">
+
+
+                            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12" 
+                                 ng-class="{'has-error':(submitted || CoBrowseForm.FeedName.$touched) && CoBrowseForm.FeedName.$error.required }">
+                                <label for="FeedName">{{"Name" | translate}}:</label>
+
+                                <label class="pull-right text-danger" ng-show="submitted || CoBrowseForm.FeedName.$touched">
+                                    <span ng-show="CoBrowseForm.FeedName.$error.required">{{"You must select a name." | translate}}</span>
+                                    <!--<span ng-show="CoBrowseForm.Rating.$error.email">This is not a valid email.</span>-->
+                                </label>
+
+                                <input type="text" class="form-control" id="FeedName" name="FeedName" required="" data-ng-model="CobrowseInformation.Name">
+                                
+
+                            </div>
+                            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label for="Password">{{"Description" | translate}}:</label>
+                                <input type="text" class="form-control" id="Description" data-ng-model="CobrowseInformation.Description">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12"
+                                 ng-class="{'has-error':(submitted || CoBrowseForm.Discovery.$touched) && CoBrowseForm.Discovery.$error.required }">
+                                <label for="Discovery">{{"Presence"| translate}}:</label>
+                                <label class="pull-right text-danger" ng-show="submitted || CoBrowseForm.Discovery.$touched">
+                                    <span ng-show="CoBrowseForm.Discovery.$error.required">{{"You must select a discovery level." | translate}}</span>
+                                    <!--<span ng-show="CoBrowseForm.Rating.$error.email">This is not a valid email.</span>-->
+                                </label>
+
+        <select name="Discovery" data-ng-model="CobrowseInformation.Configuration.Discovery" required="" class="form-control">
+                                    <option value="public">{{"Public"| translate}}</option>
+                                    <option value="private">{{"Private"| translate}}</option>
+                                </select>
+
+ 
+                            </div>
+
+
+                            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12"
+                                 ng-class="{'has-error':(submitted || CoBrowseForm.Rating.$touched) && CoBrowseForm.Rating.$error.required }">
+                                <label>{{"Rating"| translate}}</label>
+                                <label class="text-danger pull-right" ng-show="submitted || CoBrowseForm.Rating.$touched">
+                                    <span ng-show="CoBrowseForm.Rating.$error.required">{{"You must select a rating." | translate}}</span>
+                                    <!--<span ng-show="CoBrowseForm.Rating.$error.email">This is not a valid email.</span>-->
+                                </label>
+                                <select data-ng-model="EditSettings.Rating" name="Rating" required="" class="form-control">
+                                    <option value="all">{{"All ages"| translate}}</option>
+                                    <option value="adult">{{"Adults only"| translate}}</option>
+                                </select>
+
+                                
+
+                            </div>
+                        </div>
+                        <div class="form-group pull-right">
+                            <a data-ng-click="CoBrowseForm.$sumitted=true;InitCoBrowsing(CoBrowseForm.$invalid)" class="btn btn-primary">{{"Start your new feed" | translate}}</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="panel panel-primary" ng-if="UImode == 'Join'">
+                <div class="panel-heading padding10">
+                    {{"Join" | translate}}
+                </div>
+                <div class="panel-body padding10">
+                    <div class="row container-fluid">
+                        <form class="form">
+                            <div class="input-group pull-left">
+                                <span class="input-group-addon" id="basic-addon1">{{"Find" | translate}}:</span>
+                                <input type="text" class="form-control" id="SearchInformationFeedUserName" data-ng-model="SearchInformation.Name">
+                                <span class="input-group-btn">
+                                    <a data-ng-click="Search()" class="btn btn-primary">{{"Find groups & users" | translate}}</a>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="row" ng-if="SearchInformation.Results">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <div class="panel panel-info">
+                                <div class="panel-heading padding10">
+                                    {{"Users" | translate}}
+                                </div>
+                                <div class="panel-body padding10">
+                                    <ul class="list-group scrolled-list">
+                                        <li class="list-group-item" ng-repeat="item in SearchInformation.Results.users">
+                                            <a ng-click="LoadFeed(item);item.opened=!item.opened">{{item.Name}}</a>
+                                            <!--<ul ng-show="item.opened">
+                                                <li ng-repeat="feed in item.Feeds">
+                                                    <a data-ng-click="ConnectToFeed(feed)">
+                                                        {{feed.Name}}
+                                                    </a>
+                                                </li>
+                                            </ul>-->
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <div class="panel panel-info">
+                                <div class="panel-heading padding10">
+                                    {{"Groups" | translate}}
+                                </div>
+                                <div class="panel-body padding10">
+                                    <ul class="list-group scrolled-list">
+                                        <li class="list-group-item" ng-repeat="item in SearchInformation.Results.tabs">
+                                            <div>
+                                                <strong> {{item.Name}}</strong>
+                                                <small>
+                                                    {{item.Description}}
+                                                </small>
+                                                <span class="badge">{{item.Followers.length}}</span>
+                                                <span class="btn btn-success fa-arrow-right fa" data-ng-click="ConnectToFeed(item)"></span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-primary" data-ng-show="UImode == 'Manage'">
+                <div class="panel-heading padding10">
+                    {{"My groups" | translate}}
+                </div>
+                <div class="panel-body">
+                    <form class="form">
+                        <div class="input-group pull-left">
+                            <span class="input-group-addon" id="basic-addon1">{{"Filter" | translate}}:</span>
+                            <input type="text" ng-model="MyGroupsFilter" class="form-control" />
+                            <span class="input-group-addon" id="basic-addon1">
+                                <label>
+                                    {{"Just my groups"| translate}}
+                                    {{MyGroupsOwnerMode}}
+                                    <input type="checkbox" ng-model="MyGroupsOwnerMode" />
+                                </label>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+                <div class="panel-body padding10 scroll-height">
+                    <div class="page-header" ng-if="FollowedFeeds.length ==0">
+                        {{"No Followed Groups" | translate}}
+                    </div>
+                    <div class="list-group">
+                        <div ng-repeat="item in FollowedFeeds | filter: {Name:MyGroupsFilter }"
+                             class="list-group-item">
+                            <div class="groups" data-ng-if="User._id !== item.UserId && !MyGroupsOwnerMode">
+                                <label>
+                                    {{item.Name}}
+                                </label> <small>{{item.Description}}</small>
+                                <a class="btn btn-danger pull-right" data-ng-if="User._id !== item.UserId" data-ng-click="Unsubscribe(item)" title="{{'Unsubscribe' | translate}}"><span class="fa fa-trash icon-big"></span> </a>
+                                <a class="btn btn-warning pull-right" data-ng-if="User._id !== item.UserId" data-toggle="modal" data-target="#subscriptionConfigurationModal" data-ng-click="ConfigureSubscription(item)" title="{{'Configure' | translate}}"><span class="fa fa-cogs icon-big"></span> </a>
+                                <a class="btn btn-info pull-right" data-ng-if="User._id !== item.UserId" data-ng-click="Reconnect(item)" title="{{'Reconnect' | translate}}"><span class="fa fa-eye icon-big"></span> </a>
+                                <div class="clear"></div>
+                            </div>
+                            <div class="groups" data-ng-if="User._id === item.UserId">
+                                <label>
+                                    {{item.Name}}
+                                </label> <small>{{item.Description}}</small>
+                                <a class="btn btn-danger pull-right" data-ng-if="User._id === item.UserId" data-ng-click="DeleteGroup(item)" title="{{'Delete' | translate}}"><span class="fa fa-trash icon-big"></span></a>
+                                <a class="btn btn-warning pull-right" data-ng-if="User._id === item.UserId" data-toggle="modal" data-target="#groupConfigurationModal" data-ng-click="ConfigureGroup(item)" title="{{'Configure' | translate}}"><span class="fa fa-cogs icon-big"></span></a>
+                                <a class="btn btn-success pull-right" data-ng-if="User._id === item.UserId" data-ng-click="Reconnect(item)" title="{{'Reconnect' | translate}}"><span class="fa fa-gamepad icon-big"></span></a>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">{{"General settings"| translate}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>{{"Language"| translate}}</label>
+                            <select data-ng-model="InterfaceLanguage" ng-options="language as language.name for language in Languages" class="form-control"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>{{"Theme"| translate}}</label>
+                            <select data-ng-model="Theme" ng-options="theme as theme for theme in Themes" class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{{"Close"| translate}}</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">{{"Save changes"| translate}}</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        <div class="modal fade" id="subscriptionConfigurationModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">{{EditSettings.Name}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>{{"Language"| translate}}</label>
+                            <select data-ng-model="Language" ng-options="language as language.name for language in Languages" class="form-control"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>{{"Theme"| translate}}</label>
+                            <select data-ng-model="EditSettings.Theme" ng-options="theme as theme for theme in Themes" class="form-control"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" data-ng-model="EditSettings.AllowPop" />
+                                {{"Allow pop"| translate}}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{{"Close"| translate}}</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" data-ng-click="PersistConfiguration()">{{"Save changes"| translate}}</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        <div class="modal fade" id="groupConfigurationModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">{{EditSettings.Name}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>{{"Presence"| translate}}</label>
+                            <select data-ng-model="EditSettings.Discovery" class="form-control">
+                                <option value="public">{{"Public"| translate}}</option>
+                                <option value="private">{{"Private"| translate}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>{{"Rating"| translate}}</label>
+                            <select data-ng-model="EditSettings.Rating" class="form-control">
+                                <option value="all">{{"All ages"| translate}}</option>
+                                <option value="adult">{{"Adults only"| translate}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>{{"Theme"| translate}}</label>
+                            <select data-ng-model="EditSettings.Theme" ng-options="theme as theme for theme in Themes" class="form-control"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" data-ng-model="EditSettings.AllowPop" />
+                                {{"Allow pop"| translate}}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{{"Close"| translate}}</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" data-ng-click="PersistGroupConfiguration()">{{"Save changes"| translate}}</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        <div class="modal fade" id="ConfirmDialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title"><span class="fa fa-send"></span> Confirm operation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>{{"Confirm deletion?" | translate}}:</label>
+                            <textarea data-ng-model="ShareUrl" id="ShareUrl" class="form-control sharebox"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default" data-dismiss="modal">{{"Cancel" | translate}}</button>
+                        <button class="btn btn-primary" clip-copy="ShareUrl">{{"Confirm" | translate}}</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+    </div>
+</body>
+</html>
