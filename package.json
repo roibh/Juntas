@@ -2,14 +2,14 @@
   "name": "juntas",
   "version": "0.0.0",
   "private": true,
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node server/app.js"
   },
   "description": "juntas",
   "author": {
-    "name": "roi1",
-    "email": "roi@wave.co.il"
+    "name": "roi",
+    "email": "roi.benhaim@gmail.com"
   },
   "dependencies": {
     "body-parser": "~1.8.1",
